@@ -1,0 +1,12 @@
+- var navItems = [{'Home':'index.html'}, {'slider':'slider.html'}]
+
+
+mixin nav(activePage='Home', classes='nav', items= navItems)
+    ul(class= classes)
+        each item in items
+            li.nav-item
+                each href, value in item
+                    a.nav-link.link-light.me-3(
+                        aria-current='page'
+                        href= href
+                        class=(value === activePage ? "active" : ''))= value
