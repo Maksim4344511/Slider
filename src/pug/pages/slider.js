@@ -1,72 +1,75 @@
 "use strict";
 
+
+
 class Slider {
-  constructor(name){
-    this.name = name;
+  constructor(elem){
+    this.wrap = elem;
+    this.dial = document.createElement('div');    
+    this.wrap.append(this.dial);
+    this.dial.className = 'slider-dial';
+    this.firstPolzunok = document.createElement('div');
+    this.firstPolzunok.className = 'slider-polzunok1';
+    this.dial.append(this.firstPolzunok);
   }
 
-  createPolzunokHTML(){
+  createPolzunokHTML(){  }
 
-    let wrap = document.body.firstChild;
-
-    let dial = document.createElement('div');
-    dial.className = 'slider-dial';
-    wrap.append(dial);
-
-    let firstPolzunok = document.createElement('div');
-    firstPolzunok.className = 'slider-polzunok1';
-    dial.append(firstPolzunok); 
-   
-  }
 
   moveFirstPolzunok(){
 
-    //let useX = event.clientX - firstPolzunok.getBoundingClientRect().left;
-    console.log(document.querySelector('.slider-dial'));
-    console.log('sdf');
-    /*
-  firstPolzunok.onmousedown = function(event) {
-    event.preventDefault(); // предотвратить запуск выделения (действие браузера)????? первый
+    let y = this.firstPolzunok;
+    let s = this.dial;
 
+    y.onmousedown = function(event){
+      
+    let shiftX = event.clientX - y.getBoundingClientRect().left;       
+   
+    console.log(event.clientX);
 
-    
-
-    document.addEventListener('mousemove', onMouseMove); // двигаем мышку
-    document.addEventListener('mouseup', onMouseUp); //отпустил мышку
+    s.addEventListener('mousemove', onMouseMove); // двигаем мышку
+    s.addEventListener('mouseup', onMouseUp); //отпустил мышку
 
     function onMouseMove(event) {
-        let moveLeft = event.clientX - useX - dial.getBoundingClientRect().left ;
+      let newLeft = event.clientX - shiftX - s.getBoundingClientRect().left;
+      console.log(newLeft);
 
-        if (moveLeft < 0) {
-            moveLeft = 0;
-          }
-          let rightEdge = dial.offsetWidth - firstPolzunok.offsetWidth;
-          if (moveLeft > rightEdge) {
-            moveLeft = rightEdge;
-          }
-  
-          firstPolzunok.style.left = moveLeft + 'px';
-        }
+      // курсор вышел из слайдера => оставить бегунок в его границах.
+      if (newLeft < 0) {
+        newLeft = 0;
+      }
+
+      let rightEdge = s.offsetWidth - y.offsetWidth;      
+      if (newLeft > rightEdge) {
+        newLeft = rightEdge;
+      }
+
+     y.style.left =  newLeft + 'px';
+    }
 
 
     function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp); 
-        document.removeEventListener('mousemove', onMouseMove);
-      }//  отключаем обработчики
+      s.removeEventListener('mouseup', onMouseUp);
+      s.removeEventListener('mousemove', onMouseMove);
+      }
+    }  
+  }
+
+  ff() {
+    let y = this.firstPolzunok;
+    y.ondragstart = function() {
+      return false;
+    };
+  };
 }
 
 
-firstPolzunok.ondragstart = function() {
-    return false;    
-};///  и опять предотвращаем выделение документа. Пока оставляю оба.*/
-  }
 
 
-};
+
+let test = new Slider(document.querySelector('.slider-wrap'));
 
 
-let test = new Slider();
-
-test.createPolzunokHTML();
 
 test.moveFirstPolzunok();
+

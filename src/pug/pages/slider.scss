@@ -11,11 +11,12 @@
     height: 5px;
     background-color: rgb(214, 212, 212);
     border-radius: 5px;
-    margin-top: 10px;
+    margin-top: 100px;
+    margin-bottom: 100px;
 }
 
 .slider-polzunok1{
-    position: relative;
+    position: absolute;
     cursor: pointer;
     top: -20px;
     left: 0px;
