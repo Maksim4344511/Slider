@@ -3,73 +3,66 @@
 
 
 class Slider {
+
   constructor(elem){
+    
     this.wrap = elem;
     this.dial = document.createElement('div');    
     this.wrap.append(this.dial);
     this.dial.className = 'slider-dial';
     this.firstPolzunok = document.createElement('div');
     this.firstPolzunok.className = 'slider-polzunok1';
-    this.dial.append(this.firstPolzunok);
+    this.dial.append(this.firstPolzunok);     
+        
   }
 
-  createPolzunokHTML(){  }
+  init(){       
+    document.addEventListener('mousedown', this.start);
+    document.addEventListener('mousemove', this.move); // переделать, что бы двигался при нажатии на ползунок.??????
+    document.addEventListener('mouseup', this.onMouseUp);
+    
+  }
 
+  start(event){     
+    let x = this.querySelector('.slider-polzunok1');
+    
+    let shiftX = event.clientX - x.getBoundingClientRect().left;
+    x.classList.add('shift');
+    x.shift = shiftX;
+  }
 
-  moveFirstPolzunok(){
+  move(event){
+    let x = this.querySelector('.slider-polzunok1');
+    let y = this.querySelector('.slider-dial');    
 
-    let y = this.firstPolzunok;
-    let s = this.dial;
+    let newLeft = event.clientX - x.shift - y.getBoundingClientRect().left;
 
-    y.onmousedown = function(event){
-      
-    let shiftX = event.clientX - y.getBoundingClientRect().left;       
-   
-    console.log(event.clientX);
-
-    s.addEventListener('mousemove', onMouseMove); // двигаем мышку
-    s.addEventListener('mouseup', onMouseUp); //отпустил мышку
-
-    function onMouseMove(event) {
-      let newLeft = event.clientX - shiftX - s.getBoundingClientRect().left;
-      console.log(newLeft);
-
-      // курсор вышел из слайдера => оставить бегунок в его границах.
-      if (newLeft < 0) {
-        newLeft = 0;
-      }
-
-      let rightEdge = s.offsetWidth - y.offsetWidth;      
-      if (newLeft > rightEdge) {
-        newLeft = rightEdge;
-      }
-
-     y.style.left =  newLeft + 'px';
+    if (newLeft < 0) {
+      newLeft = 0;
     }
 
+    let rightEdge = y.offsetWidth - x.offsetWidth;
 
-    function onMouseUp() {
-      s.removeEventListener('mouseup', onMouseUp);
-      s.removeEventListener('mousemove', onMouseMove);
-      }
-    }  
+    if (newLeft > rightEdge) {
+      newLeft = rightEdge;
+    }
+
+    x.style.left = newLeft + 'px';    
+  }   
+ 
+
+  onMouseUp(){ 
+    document.removeEventListener('mouseup', this.onMouseUp);  //не могу отменить??????
+    document.removeEventListener('mousemove', this.move);    //не могу отменить???????
   }
-
-  ff() {
-    let y = this.firstPolzunok;
-    y.ondragstart = function() {
-      return false;
-    };
-  };
+ 
+  
 }
 
 
 
+let slider = new Slider(document.querySelector('.slider-wrap'));
 
-
-let test = new Slider(document.querySelector('.slider-wrap'));
-
-
-
-test.moveFirstPolzunok();
+slider.init();
+console.log(slider);
 
