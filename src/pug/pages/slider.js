@@ -12,28 +12,35 @@ class Slider {
     this.dial.className = 'slider-dial';
     this.firstPolzunok = document.createElement('div');
     this.firstPolzunok.className = 'slider-polzunok1';
-    this.dial.append(this.firstPolzunok);     
+    this.dial.append(this.firstPolzunok);  
+    
+    this.onpointermove = this.onpointermove.bind(this);
+    this.pointerup = this.pointerup.bind(this);
+   
         
   }
 
   init(){       
-    document.addEventListener('mousedown', this.start);
-    document.addEventListener('mousemove', this.move); // переделать, что бы двигался при нажатии на ползунок.??????
-    document.addEventListener('mouseup', this.onMouseUp);
-    
+    this.firstPolzunok.addEventListener('pointerdown', this.onpointerdown.bind(this), false);         
   }
 
-  start(event){     
-    let x = this.querySelector('.slider-polzunok1');
+  onpointerdown(event){   
+    document.addEventListener('pointermove',  this.move, false); 
+    document.addEventListener('pointerup', this.pointerup, false); 
     
+    let x = document.querySelector('.slider-polzunok1');
+
     let shiftX = event.clientX - x.getBoundingClientRect().left;
     x.classList.add('shift');
     x.shift = shiftX;
+     
   }
 
-  move(event){
-    let x = this.querySelector('.slider-polzunok1');
-    let y = this.querySelector('.slider-dial');    
+ 
+  onpointermove(event){    
+
+    let x = document.querySelector('.slider-polzunok1');
+    let y = document.querySelector('.slider-dial');    
 
     let newLeft = event.clientX - x.shift - y.getBoundingClientRect().left;
 
@@ -47,22 +54,22 @@ class Slider {
       newLeft = rightEdge;
     }
 
-    x.style.left = newLeft + 'px';    
-  }   
- 
-
-  onMouseUp(){ 
-    document.removeEventListener('mouseup', this.onMouseUp);  //не могу отменить??????
-    document.removeEventListener('mousemove', this.move);    //не могу отменить???????
+    x.style.left = newLeft + 'px';      
   }
- 
   
+  pointerup(){     
+    document.removeEventListener('pointerup', this.pointerup); 
+    document.removeEventListener('pointermove', this.onpointermove);    
+
+  }
 }
 
 
 
-let slider = new Slider(document.querySelector('.slider-wrap'));
+const slider = new Slider(document.querySelector('.slider-wrap'));
 
 slider.init();
-console.log(slider);
+//console.log(slider);
+
+
 
