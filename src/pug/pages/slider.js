@@ -1,6 +1,8 @@
 "use strict";
 
+import {sayTest} from './slider-function.js';
 
+sayTest();
 
 class Slider {
   
@@ -13,15 +15,18 @@ class Slider {
   secondValue = document.createElement('div');
   config = {
     startFP: 10,
-    startSP: 200,
-    scale: 10,
+    startSP: 210,
+    max: 1200, 
+    plane: 'horizontal',    
   };
+  
 
   constructor(elem, options){
 
     this.wrap = elem;    
 
-    this.config = Object.assign(this.config, options);   
+    this.config = Object.assign(this.config, options);
+    this.scale = (this.config.max / 10);   
 
     this.title.className = 'slider-title';
     this.title.innerHTML = 'Range slider';
@@ -36,11 +41,11 @@ class Slider {
    
     this.firstPolzunok.className = 'slider-polzunok1';
     this.dial.append(this.firstPolzunok);
-    this.firstPolzunok.style.left = (this.config.startFP * (this.dial.offsetWidth - this.firstPolzunok.offsetWidth) / 10 / this.config.scale) + 'px';   
+    this.firstPolzunok.style.left = (this.config.startFP * (this.dial.offsetWidth - this.firstPolzunok.offsetWidth) / 10 / this.scale) + 'px';   
     
     this.secondPolzunok.className = 'slider-polzunok2';
     this.dial.append(this.secondPolzunok); 
-    this.secondPolzunok.style.left =  (this.config.startSP * (this.dial.offsetWidth - this.secondPolzunok.offsetWidth) / 10 / this.config.scale) + 'px';
+    this.secondPolzunok.style.left =  (this.config.startSP * (this.dial.offsetWidth - this.secondPolzunok.offsetWidth) / 10 / this.scale) + 'px';
     console.log(this.dial.offsetWidth);
     
     this.firstValue.className = 'slider-value1';
@@ -72,14 +77,14 @@ class Slider {
     let firstPolzunok = this.wrap.querySelector('.slider-polzunok1');
     let secondPolzunok = this.wrap.querySelector('.slider-polzunok2');
 
-    if (event.currentTarget == firstPolzunok){  
-      this.a = 1;  //не красиво, подумать как переделать
+    if (event.target === firstPolzunok){  
+      this.focus = 'first';  
       firstPolzunok.shiftX = event.clientX - firstPolzunok.getBoundingClientRect().left; 
      
-    } else if (event.currentTarget == secondPolzunok){
-      this.a = 2;  //не красиво, подумать как переделать
+    } else if (event.target === secondPolzunok){
+      this.focus = 'second'; 
       secondPolzunok.shiftX = event.clientX - secondPolzunok.getBoundingClientRect().left;     
-    }       
+    }   // потом добавить условие клика на шкалу    
   }
  
   onPointerMove(event){   
@@ -88,8 +93,8 @@ class Slider {
     let firstPolzunok = this.wrap.querySelector('.slider-polzunok1');
     let secondPolzunok = this.wrap.querySelector('.slider-polzunok2');  
     let rightEdge = dial.offsetWidth - secondPolzunok.offsetWidth;  
-    
-    if (this.a == 1){  //не красиво, подумать как переделать
+   
+    if (this.focus === 'first'){      
 
       let newLeftFirstP = event.clientX - firstPolzunok.shiftX - dial.getBoundingClientRect().left;
 
@@ -102,12 +107,12 @@ class Slider {
       };
 
       firstPolzunok.style.left = newLeftFirstP + 'px';
-      this.firstValue.innerHTML = Math.round((+this.firstPolzunok.style.left.slice(0, -2) / (rightEdge)) * 10 * this.config.scale); 
+      this.firstValue.innerHTML = Math.round((+this.firstPolzunok.style.left.slice(0, -2) / (rightEdge)) * 10 * this.scale); 
       
       this.dialColor.style.left = newLeftFirstP + 'px';
       this.dialColor.style.width = +secondPolzunok.style.left.slice(0, -2) - +firstPolzunok.style.left.slice(0, -2) +'px';
 
-    } else if (this.a == 2){//не красиво, подумать как переделать
+    } else if  (this.focus === 'second'){
 
       let newLeftSecondP = event.clientX - secondPolzunok.shiftX - dial.getBoundingClientRect().left;   
 
@@ -122,7 +127,7 @@ class Slider {
       };
 
       secondPolzunok.style.left = newLeftSecondP + 'px';     
-      this.secondValue.innerHTML = ` - ${Math.round((+this.secondPolzunok.style.left.slice(0, -2) / (rightEdge)) * 10 * this.config.scale)}`;
+      this.secondValue.innerHTML = ` - ${Math.round((+this.secondPolzunok.style.left.slice(0, -2) / (rightEdge)) * 10 * this.scale)}`;
       this.dialColor.style.width = +secondPolzunok.style.left.slice(0, -2) - +firstPolzunok.style.left.slice(0, -2) +'px';
     };        
   }
@@ -136,15 +141,8 @@ class Slider {
 }
 
 
-const slider = new Slider(document.querySelector('.slider-wrap'), {startFP: 23});
-slider.init();
-
-const test = new Slider(document.querySelector('.slider-test'), {startFP: 49});
-test.init();
-
-const test2 = new Slider(document.querySelector('.slider-test2'));
-test2.init();
 
 
 
 
+export {Slider};
