@@ -24,7 +24,7 @@ class SliderVertical {
       
 
 
-      if(this.config.plane === 'vertical') {
+      if(this.config.plane === 'vertical') { //!!!!!!!!!!!!!
         elem.classList.add('rotate')  
       };
       
@@ -70,7 +70,7 @@ class SliderVertical {
     }
   
     onPointerDown(event){   
-  
+          
       document.addEventListener('pointermove',  this.onPointerMove, false); 
       document.addEventListener('pointerup', this.onPointerUp, false); 
       
@@ -79,15 +79,16 @@ class SliderVertical {
   
       if (event.target === firstPolzunok){  
         this.focus = 'first';  
-        firstPolzunok.shiftX = event.clientX - firstPolzunok.getBoundingClientRect().left; 
+        firstPolzunok.shiftX = event.clientY - firstPolzunok.getBoundingClientRect().top; // !!!!!!!!!!!!!
        
       } else if (event.target === secondPolzunok){
         this.focus = 'second'; 
-        secondPolzunok.shiftX = event.clientX - secondPolzunok.getBoundingClientRect().left;     
+        secondPolzunok.shiftX = event.clientY - secondPolzunok.getBoundingClientRect().top; //!!!!!!! !!!!!!!   
       }       
     }
    
     onPointerMove(event){   
+        
   
       let dial = this.wrap.querySelector('.slider-dial');
       let firstPolzunok = this.wrap.querySelector('.slider-polzunok1');
@@ -96,8 +97,8 @@ class SliderVertical {
      
       if (this.focus === 'first'){      
   
-        let newLeftFirstP = event.clientY - firstPolzunok.shiftX - dial.getBoundingClientRect().left;
-  
+        let newLeftFirstP =  dial.getBoundingClientRect().bottom - event.clientY - (firstPolzunok.offsetWidth - firstPolzunok.shiftX); //!!!!!!!!!!!!!!
+
         if (newLeftFirstP < 0) {
           newLeftFirstP = 0;
         };
@@ -114,7 +115,7 @@ class SliderVertical {
   
       } else if  (this.focus === 'second'){
   
-        let newLeftSecondP = event.clientX - secondPolzunok.shiftX - dial.getBoundingClientRect().left;   
+        let newLeftSecondP = dial.getBoundingClientRect().bottom - event.clientY - (secondPolzunok.offsetWidth - secondPolzunok.shiftX);   // !!!!!!!!
   
         
   
