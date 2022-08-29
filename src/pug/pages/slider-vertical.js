@@ -1,3 +1,5 @@
+/*
+
 class SliderVertical {
   
     title = document.createElement('div');
@@ -21,22 +23,16 @@ class SliderVertical {
   
       this.config = Object.assign(this.config, options);
       this.scale = (this.config.max / 10);
-      
-
-
-      if(this.config.plane === 'vertical') { //!!!!!!!!!!!!!
-        elem.classList.add('rotate')  
-      };
-      
-      
-      
   
       this.title.className = 'slider-title';
       this.title.innerHTML = 'Range slider';
       this.wrap.append(this.title);
       
       this.wrap.append(this.dial);
-      this.dial.className = 'slider-dial';      
+      this.dial.className = 'slider-dial'; 
+      if(this.config.plane === 'vertical') { //!!!!!!!!!!!!!
+        this.dial.classList.add('rotate')  
+      };     
         
       this.dial.append(this.dialColor);
       this.dialColor.className = 'slider-dial__color';  
@@ -147,3 +143,4 @@ class SliderVertical {
   
   
   export {SliderVertical};
+  */

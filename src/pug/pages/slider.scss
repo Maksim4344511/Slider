@@ -1,23 +1,24 @@
 body{
     width: 1200px;
+    padding-left: 100px;
 }
 
-.slider-wrap{   
+.slider-test1{   
     width: 500px;
     height: 100px;
 }
 
-.slider-test{   
+.slider-test2{   
     width: 300px;
     height: 100px;
 }
 
-.slider-test2{   
+.slider-test3{   
     width: 1000px;
     height: 100px;
 }
 
-.slider-test3{   
+.slider-test4{   
     width: 200px;
     height: 400px;
 }
@@ -32,36 +33,48 @@ body{
     text-transform: uppercase;
     color: #080e1f;  
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
     user-select: none;
     touch-action: none;
 }
 
-.slider-value1{
-    width:auto;
+.slider-value1{    
+    
+    position: absolute;
+    top: -20px;   
+    width: auto;
+    transform-origin: left;
+    cursor: pointer;   
     font-family: 'Montserrat';
     font-style: normal;
-    font-weight: 700;
-    font-size: 15px;
-    line-height: 16px;
-    text-align: right;
-    text-transform: uppercase;
-    padding-right: 2px;
-    margin-top: 20px;
-    color: #343844;  
+    font-weight: 450;
+    font-size: 10px;
+    line-height: 10px;
+    //text-align: start;
+    border-radius: 10px;
+    border:blue 1px solid;    
+    color:black;  
+    padding: 0 4px;
 }
 
 .slider-value2{
+    
+    position: absolute;
+    top: -20px;
+    left: +5px;
     width: auto;
+    cursor: pointer;    
     font-family: 'Montserrat';
     font-style: normal;
-    font-weight: 700;
-    font-size: 15px;
-    line-height: 16px;
-    text-align: start;
-    text-transform: uppercase;   
-    margin-top: 20px;
-    color: #343844;  
+    font-weight: 450;
+    font-size: 10px;
+    line-height: 10px;
+    //text-align: start;
+    border-radius: 10px;
+    border:blue 1px solid;    
+    color:black;  
+    padding: 0 4px;
+
 }
 
 .slider-dial {
@@ -86,23 +99,24 @@ body{
 }
 
 .slider-polzunok1{
+    z-index: 2;
     position: absolute;
     cursor: pointer;
     top: -10px;
-    width: 10px;
+    width: 12px;
     height: 25px;
     background-color:  blue;
     border-radius: 35%;
-       user-select: none;
+    user-select: none;
     touch-action: none;
     
 }
 
-.slider-polzunok2{
+.slider-polzunok2{    
     position: absolute;
     cursor: pointer;
     top: -10px;  
-    width: 10px;
+    width: 12px;
     height: 25px;  
     background-color:  blue;
     border-radius: 35%;
@@ -113,7 +127,8 @@ body{
 
 .rotate{
     transform: rotate(270deg);
-    margin-left: 200px;
+    margin-top: 120px;
+   
 }
 
 

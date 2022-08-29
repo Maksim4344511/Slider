@@ -1,8 +1,10 @@
 "use strict";
 
-import {sayTest} from './slider-function.js';
+import {sayTest, sayTest2 } from './utils.js';
 
-sayTest();
+
+
+
 
 class Slider {
   
@@ -16,6 +18,7 @@ class Slider {
   config = {
     startFP: 10,
     startSP: 210,
+    min: 0,
     max: 1200, 
     plane: 'horizontal',    
   };
@@ -34,7 +37,8 @@ class Slider {
     
     this.wrap.append(this.dial);
     this.dial.className = 'slider-dial';
-    
+
+    if(this.config.plane === 'vertical') {  this.dial.classList.add('rotate');  };       
       
     this.dial.append(this.dialColor);
     this.dialColor.className = 'slider-dial__color';  
@@ -46,45 +50,73 @@ class Slider {
     this.secondPolzunok.className = 'slider-polzunok2';
     this.dial.append(this.secondPolzunok); 
     this.secondPolzunok.style.left =  (this.config.startSP * (this.dial.offsetWidth - this.secondPolzunok.offsetWidth) / 10 / this.scale) + 'px';
-    console.log(this.dial.offsetWidth);
     
     this.firstValue.className = 'slider-value1';
-    this.firstValue.innerHTML = this.config.startFP;
-    this.title.append(this.firstValue);
-    
+    this.firstValue.innerHTML = this.config.startFP;    
+    this.firstPolzunok.append(this.firstValue);
+    this.firstValue.style.left = - 8 * this.firstValue.innerHTML.length;
+     
+
     this.secondValue.className = 'slider-value2';
-    this.secondValue.innerHTML = ` - ${this.config.startSP}`;
-    this.title.append(this.secondValue);        
+    this.secondValue.innerHTML = this.config.startSP;
+    this.secondPolzunok.append(this.secondValue); 
 
     this.dialColor.style.left = +this.firstPolzunok.style.left.slice(0, -2) +'px';
     this.dialColor.style.width = +this.secondPolzunok.style.left.slice(0, -2) - +this.firstPolzunok.style.left.slice(0, -2) +'px';
+    
+   }
 
+  init(){ 
+    sayTest();  
     this.onPointerMove = this.onPointerMove.bind(this);
-    this.onPointerUp = this.onPointerUp.bind(this);}
-
-  init(){   
-
+    this.onPointerUp = this.onPointerUp.bind(this);
     this.firstPolzunok.addEventListener('pointerdown', this.onPointerDown.bind(this), false);
-    this.secondPolzunok.addEventListener('pointerdown', this.onPointerDown.bind(this), false);    
+    this.secondPolzunok.addEventListener('pointerdown', this.onPointerDown.bind(this), false); 
+    
         
   }
 
-  onPointerDown(event){   
-
+  onPointerDown(event){  
     document.addEventListener('pointermove',  this.onPointerMove, false); 
     document.addEventListener('pointerup', this.onPointerUp, false); 
+    
     
     let firstPolzunok = this.wrap.querySelector('.slider-polzunok1');
     let secondPolzunok = this.wrap.querySelector('.slider-polzunok2');
 
-    if (event.target === firstPolzunok){  
-      this.focus = 'first';  
-      firstPolzunok.shiftX = event.clientX - firstPolzunok.getBoundingClientRect().left; 
-     
-    } else if (event.target === secondPolzunok){
-      this.focus = 'second'; 
-      secondPolzunok.shiftX = event.clientX - secondPolzunok.getBoundingClientRect().left;     
-    }   // потом добавить условие клика на шкалу    
+    ///условие: вертикальный или горизонтальный
+
+    if(this.config.plane === 'horizontal') { // добавить условие клика на шкалу,   в заисимости от положения ползунка, слева, значит влево 
+      if (event.target === firstPolzunok){  
+        this.focus = 'first'; 
+        firstPolzunok.style.zIndex = 2;
+        secondPolzunok.style.zIndex = 1;
+        firstPolzunok.shiftX = event.clientX - firstPolzunok.getBoundingClientRect().left; 
+      
+      } else if (event.target === secondPolzunok){
+        this.focus = 'second'; 
+        secondPolzunok.shiftX = event.clientX - secondPolzunok.getBoundingClientRect().left; 
+        firstPolzunok.style.zIndex = 1;
+        secondPolzunok.style.zIndex = 2;    
+      }; 
+
+    } else if (this.config.plane === 'vertical'){
+      if (event.target === firstPolzunok){  
+          this.focus = 'first';
+          firstPolzunok.style.zIndex = 2;
+          secondPolzunok.style.zIndex = 1;          
+
+          firstPolzunok.shiftX = event.clientY - firstPolzunok.getBoundingClientRect().top; 
+
+        } else if (event.target === secondPolzunok){
+          this.focus = 'second';
+          firstPolzunok.style.zIndex = 1;
+          secondPolzunok.style.zIndex = 2;
+
+          secondPolzunok.shiftX = event.clientY - secondPolzunok.getBoundingClientRect().top;
+        }  
+    };
+        
   }
  
   onPointerMove(event){   
@@ -93,41 +125,50 @@ class Slider {
     let firstPolzunok = this.wrap.querySelector('.slider-polzunok1');
     let secondPolzunok = this.wrap.querySelector('.slider-polzunok2');  
     let rightEdge = dial.offsetWidth - secondPolzunok.offsetWidth;  
-   
-    if (this.focus === 'first'){      
+    let newLeftFirstP;
+    let  newLeftSecondP;
 
-      let newLeftFirstP = event.clientX - firstPolzunok.shiftX - dial.getBoundingClientRect().left;
+    if (this.focus === 'first'){ 
+
+      if (this.config.plane === 'horizontal'){
+        newLeftFirstP = event.clientX - firstPolzunok.shiftX - dial.getBoundingClientRect().left;
+      } else if (this.config.plane === 'vertical'){
+        newLeftFirstP =  dial.getBoundingClientRect().bottom - event.clientY - (firstPolzunok.offsetWidth - firstPolzunok.shiftX); //!!!!!!!!!!!!!!  
+      }
 
       if (newLeftFirstP < 0) {
         newLeftFirstP = 0;
       };
 
-      if (newLeftFirstP > +secondPolzunok.style.left.slice(0, -2)){
+      if (newLeftFirstP >= +secondPolzunok.style.left.slice(0, -2)){
         newLeftFirstP = +secondPolzunok.style.left.slice(0, -2);
       };
 
       firstPolzunok.style.left = newLeftFirstP + 'px';
-      this.firstValue.innerHTML = Math.round((+this.firstPolzunok.style.left.slice(0, -2) / (rightEdge)) * 10 * this.scale); 
+      this.firstValue.innerHTML = Math.round((+this.firstPolzunok.style.left.slice(0, -2) / (rightEdge)) * 10 * this.scale);
+      this.firstValue.style.left = - 8 * this.firstValue.innerHTML.length; 
       
       this.dialColor.style.left = newLeftFirstP + 'px';
       this.dialColor.style.width = +secondPolzunok.style.left.slice(0, -2) - +firstPolzunok.style.left.slice(0, -2) +'px';
 
     } else if  (this.focus === 'second'){
 
-      let newLeftSecondP = event.clientX - secondPolzunok.shiftX - dial.getBoundingClientRect().left;   
+        if (this.config.plane === 'horizontal'){
+          newLeftSecondP = event.clientX - secondPolzunok.shiftX - dial.getBoundingClientRect().left;   
+        } else if (this.config.plane === 'vertical'){
+          newLeftSecondP = dial.getBoundingClientRect().bottom - event.clientY - (secondPolzunok.offsetWidth - secondPolzunok.shiftX); 
+        };
 
-      
-
-      if (newLeftSecondP > rightEdge) {
-        newLeftSecondP = rightEdge;
-      }; 
-      
-      if (newLeftSecondP < +firstPolzunok.style.left.slice(0, -2)){
-        newLeftSecondP = +firstPolzunok.style.left.slice(0, -2);
-      };
+        if (newLeftSecondP > rightEdge) {
+          newLeftSecondP = rightEdge;
+        }; 
+        
+        if (newLeftSecondP < +firstPolzunok.style.left.slice(0, -2)){
+          newLeftSecondP = +firstPolzunok.style.left.slice(0, -2);
+        };
 
       secondPolzunok.style.left = newLeftSecondP + 'px';     
-      this.secondValue.innerHTML = ` - ${Math.round((+this.secondPolzunok.style.left.slice(0, -2) / (rightEdge)) * 10 * this.scale)}`;
+      this.secondValue.innerHTML = Math.round((+this.secondPolzunok.style.left.slice(0, -2) / (rightEdge)) * 10 * this.scale);
       this.dialColor.style.width = +secondPolzunok.style.left.slice(0, -2) - +firstPolzunok.style.left.slice(0, -2) +'px';
     };        
   }
