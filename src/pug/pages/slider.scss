@@ -1,26 +1,31 @@
 body{
     width: 1200px;
     padding-left: 100px;
+    padding-top: 20px;
 }
 
 .slider-test1{   
-    width: 500px;
+    width: 300px;
     height: 100px;
+    margin-bottom: 20px;
 }
 
 .slider-test2{   
     width: 300px;
     height: 100px;
+    margin-bottom: 20px;
 }
 
 .slider-test3{   
-    width: 1000px;
+    width: 300px;
     height: 100px;
+    margin-bottom: 20px;
 }
 
 .slider-test4{   
     width: 200px;
     height: 400px;
+    margin-bottom: 20px;
 }
 
 .slider-title{
@@ -38,47 +43,11 @@ body{
     touch-action: none;
 }
 
-.slider-value1{    
-    
-    position: absolute;
-    top: -20px;   
-    width: auto;
-    transform-origin: left;
-    cursor: pointer;   
-    font-family: 'Montserrat';
-    font-style: normal;
-    font-weight: 450;
-    font-size: 10px;
-    line-height: 10px;
-    //text-align: start;
-    border-radius: 10px;
-    border:blue 1px solid;    
-    color:black;  
-    padding: 0 4px;
-}
-
-.slider-value2{
-    
-    position: absolute;
-    top: -20px;
-    left: +5px;
-    width: auto;
-    cursor: pointer;    
-    font-family: 'Montserrat';
-    font-style: normal;
-    font-weight: 450;
-    font-size: 10px;
-    line-height: 10px;
-    //text-align: start;
-    border-radius: 10px;
-    border:blue 1px solid;    
-    color:black;  
-    padding: 0 4px;
-
-}
-
 .slider-dial {
+    background-position: 0 0;
     position: relative;
+    left: 20px;
+    z-index: 0;
     cursor: pointer;
     width: 100%;
     height: 5px;;
@@ -99,8 +68,7 @@ body{
     touch-action: none;
 }
 
-.slider-Btn1{
-    z-index: 2;
+.slider-Pointer1{
     position: absolute;
     cursor: pointer;
     top: -10px;
@@ -113,7 +81,7 @@ body{
     
 }
 
-.slider-Btn2{    
+.slider-Pointer2{    
     position: absolute;
     cursor: pointer;
     top: -10px;  
@@ -125,6 +93,44 @@ body{
     touch-action: none;
 }
 
+.slider-value1{    
+    pointer-events: none;
+    position: absolute;
+    top: -20px;   
+    width: auto;
+    transform-origin: left;
+    cursor: pointer;   
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 450;
+    font-size: 10px;
+    line-height: 10px;
+    //text-align: start;
+    border-radius: 10px;
+    border:blue 1px solid;    
+    color:black;  
+    padding: 0 4px;
+}
+
+.slider-value2{
+    pointer-events: none;
+    position: absolute;
+    top: -20px;
+    left: +5px;
+    width: auto;
+    cursor: pointer;    
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 450;
+    font-size: 10px;
+    line-height: 10px;
+    //text-align: start;
+    border-radius: 10px;
+    border:blue 1px solid;    
+    color:black;  
+    padding: 0 4px;
+
+}
 
 .rotate{
     transform: rotate(270deg);
@@ -132,7 +138,24 @@ body{
    
 }
 
-
-.asd{
-    height: 2000px;
+.slider-config{  
+    display: block; 
+    width: 200px;
+    height: 100px;
+    border: 1px solid black;
+    transform: translateX(500px) translateY(-65px);
+  
 }
+
+
+.configTitle{
+    width: 50px;
+    height: 10px;
+    border: 1px solid black;
+
+}
+
+.configValue{
+    width: 40px;
+    height: 20px;
+    border: 1px solid black;}

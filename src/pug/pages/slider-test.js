@@ -8,13 +8,13 @@ const test1 = new Slider(document.querySelector('.slider-test1'), {
   startSP: 450000,
   max: 1000000,
   plane: 'horizontal',
-  min: 100, 
+  min: 0, 
 });
 test1.init();
 
 const test2 = new Slider(document.querySelector('.slider-test2'), {
   startFP: 5,
-  startSP: 50,
+  startSP: 10,
   value: 'none',
   
 });
@@ -22,9 +22,9 @@ test2.init();
 
 const test3 = new Slider(document.querySelector('.slider-test3'), {
   startFP: 4,
-  startSP: 9,
+  startSP: 10,
   max: 10, 
-  min: 2,
+  min: 0,
   plane: 'horizontal', 
   
 });
