@@ -1,6 +1,6 @@
 "use strict";
 
-import {sayTest, sayTest2 } from './utils.js';
+import {createMenu } from './utils.js';
 
 class Slider {
   
@@ -11,7 +11,7 @@ class Slider {
   secondPointer = document.createElement('div');
   firstValue = document.createElement('div');
   secondValue = document.createElement('div');
-  sliderConfig = document.createElement('div');
+  
   config = {
     value: 'visible',
     startFP: 10,
@@ -19,14 +19,20 @@ class Slider {
     min: 0,
     max: 10, 
     plane: 'horizontal',
-    quantityPointer: '2',    
+    quantityPointer: '2',   
+    
   };  
+  
+
 
   constructor(elem, options){
 
-    this.wrap = elem;    
+    this.wrap = elem;  
+    
 
     this.config = Object.assign(this.config, options);
+    this.config = Object.assign(this.config, this.config2);
+    
     this.scale = (this.config.max - this.config.min) / 10;   
 
     this.title.className = 'slider-title';
@@ -55,7 +61,7 @@ class Slider {
     } else if (this.config.quantityPointer === '1'){
 
       this.firstPointer.style.display = 'none';
-      this.firstPointer.style.width = 0;
+      this.firstPointer.style.left = 0; 
     };
 
     this.secondPointer.className = 'slider-Pointer2';
@@ -68,53 +74,23 @@ class Slider {
       this.firstValue.innerHTML = this.config.startFP;    
       this.firstPointer.append(this.firstValue);
       this.firstValue.style.display = this.firstPointer.style.display;
-      this.firstValue.style.left = - 4 * this.firstValue.innerHTML.length;
+      this.firstValue.style.left = - 7 * this.firstValue.innerHTML.length;
       
       this.secondValue.className = 'slider-value2';
       this.secondValue.innerHTML = this.config.startSP ;
       this.secondPointer.append(this.secondValue); 
     };
-
-    this.dialColor.style.left = +this.firstPointer.style.left.slice(0, -2) +'px';
-    this.dialColor.style.width = +this.secondPointer.style.left.slice(0, -2) - +this.firstPointer.style.left.slice(0, -2) +'px'; 
-
-    //menu
-    this.wrap.append(this.sliderConfig);
-    this.sliderConfig.className = 'slider-config';
+    if (this.config.quantityPointer === '2'){
+      this.dialColor.style.left = +this.firstPointer.style.left.slice(0, -2) +'px';
+      this.dialColor.style.width = +this.secondPointer.style.left.slice(0, -2) - +this.firstPointer.style.left.slice(0, -2) +'px'; 
+    }else if (this.config.quantityPointer === '1'){
+      this.dialColor.style.left = 0;
+      this.dialColor.style.width = +this.secondPointer.style.left.slice(0, -2); 
+    };
     
-    this.titleConfig = document.createElement('div');
-    this.sliderConfig.append(this.titleConfig);
-    this.titleConfig.className = 'configTitle';
-
-    this.configValue = document.createElement('input');
-    this.sliderConfig.append(this.configValue);
-    this.configValue.className = 'configValue';  
-    this.configValue.placeholder="введите сообщение";
+    createMenu(this);  
    
 
-    this.configStartFP = document.createElement('input'); 
-
-    this.configStartSP = document.createElement('input'); 
-
-    this.configMin= document.createElement('input');   
-
-    this.configMax = document.createElement('input'); 
-
-    this.configPlane = document.createElement('input');
-    
-    this.configQuantityPointer = document.createElement('input');  
-
-    
-    this.wrap.append(this.sliderConfig);
-/*
-    value: 'visible',
-    startFP: 10,
-    startSP: 20,
-    min: 0,
-    max: 10, 
-    plane: 'horizontal',
-    quantityPointer: '2', 
-*/
    }
 
   init(){ 
@@ -125,9 +101,44 @@ class Slider {
     this.secondPointer.addEventListener('pointerdown', this.onPointerDown.bind(this), false);   
 
     this.dial.addEventListener('pointerdown', this.onDialDown.bind(this), false);  
+
+    this.select.addEventListener('change', this.onChange.bind(this), false);  
+    this.btn.addEventListener('click', this.onSubmit.bind(this), false); 
   }
 
+  onChange(){
+    this.config.quantityPointer = this.select.value;
+    let rightEdge = this.dial.offsetWidth - this.secondPointer.offsetWidth;
+    
+    console.log(this.config.quantityPointer);  
+    if(this.config.quantityPointer === '2'){
+
+      this.firstPointer.style.left = ((this.config.startFP - this.config.min) * (this.dial.offsetWidth - this.firstPointer.offsetWidth) / 10 / this.scale) + 'px'; 
+      this.firstPointer.style.display = 'block';
+      this.dialColor.style.left = +this.firstPointer.style.left.slice(0, -2) +'px';
+      this.dialColor.style.width = +this.secondPointer.style.left.slice(0, -2) - +this.firstPointer.style.left.slice(0, -2) +'px'; 
+      this.firstValue.innerHTML = Math.round((+this.firstPointer.style.left.slice(0, -2) / (rightEdge)) * 10 * this.scale) + this.config.min;
+      this.firstValue.style.left = - 7 * this.firstValue.innerHTML.length;
+      
+
+    } else if (this.config.quantityPointer === '1'){
+
+      this.firstPointer.style.display = 'none';
+      this.firstPointer.style.left = 0;
+      this.dialColor.style.left = 0;
+      this.dialColor.style.width = +this.secondPointer.style.left.slice(0, -2); 
+    };
+    
+    
+  }
+  onSubmit(){
+   
+    //this.firstPointer.style.display = 'none';
+    
+  }
   
+
+
   onDialDown(event){ // клик по шкале    
 
     let dial = this.wrap.querySelector('.slider-dial');
@@ -140,11 +151,41 @@ class Slider {
       
       let rightEdge = dial.offsetWidth - secondPointer.offsetWidth;
 
-      if(this.config.plane === 'horizontal'){
+      if(this.config.plane === 'horizontal'){        
        
         dialSfiftX = event.clientX - firstPointer.offsetWidth / 2 - dial.getBoundingClientRect().left;
 
-        if ((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2){
+        if ((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && this.config.quantityPointer === '2'){
+
+          if (dialSfiftX - firstPointer.offsetWidth < 0) {
+  
+            dialSfiftX = 0;
+          }; 
+  
+          this.firstPointer.style.left = dialSfiftX + 'px';
+  
+        } else if((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 > (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2){
+  
+          if (dialSfiftX > rightEdge ) {
+  
+            dialSfiftX = rightEdge;        
+          }; 
+        this.secondPointer.style.left = dialSfiftX + 'px';        
+        } else if (((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && this.config.quantityPointer === '1')){
+          if (dialSfiftX > rightEdge ) {
+  
+            dialSfiftX = rightEdge;        
+          }; 
+          this.secondPointer.style.left = dialSfiftX + 'px'; 
+          this.firstPointer.style.left = 0;
+        };
+
+
+    } else if (this.config.plane === 'vertical'){
+
+        dialSfiftX = dial.getBoundingClientRect().bottom - event.clientY - firstPointer.offsetWidth / 2;
+        
+        if ((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && this.config.quantityPointer === '2'){
 
           if (dialSfiftX - firstPointer.offsetWidth < 0) {
   
@@ -160,28 +201,12 @@ class Slider {
             dialSfiftX = rightEdge;        
           }; 
         this.secondPointer.style.left = dialSfiftX + 'px';  
-        };
-
-
-    } else if (this.config.plane === 'vertical'){
-
-        dialSfiftX = dial.getBoundingClientRect().bottom - event.clientY - firstPointer.offsetWidth / 2;
-        
-        if ((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2){
-
-          if (dialSfiftX - firstPointer.offsetWidth < 0) {
-  
-            dialSfiftX = 0;
-          }; 
-  
-          this.firstPointer.style.left = dialSfiftX + 'px';
-  
-        } else if((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 > (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2){
-  
+        } else if((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && this.config.quantityPointer === '1'){
           if (dialSfiftX > rightEdge) {
   
             dialSfiftX = rightEdge;        
           }; 
+          this.firstPointer.style.left = 0;
         this.secondPointer.style.left = dialSfiftX + 'px';  
         };
       };
