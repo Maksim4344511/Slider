@@ -138,24 +138,21 @@ body{
    
 }
 
-.slider-config{  
-    display: block; 
+.slider-menu{  
+    position: absolute; 
+    display: flex;
+    top: 20px;
+    left: 400px;
+    width: 400px;
+    height: 100px;
+    border: 1px solid black;
+}
+
+
+
+.slider-config-save{  
+    display: flex;   
     width: 200px;
     height: 100px;
     border: 1px solid black;
-    transform: translateX(500px) translateY(-65px);
-  
 }
-
-
-.configTitle{
-    width: 50px;
-    height: 10px;
-    border: 1px solid black;
-
-}
-
-.configValue{
-    width: 40px;
-    height: 20px;
-    border: 1px solid black;}

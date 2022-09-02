@@ -9,13 +9,14 @@ const test1 = new Slider(document.querySelector('.slider-test1'), {
   max: 1000000,
   plane: 'horizontal',
   min: 0, 
+  showOptions: 'true',
 });
 test1.init();
 
 const test2 = new Slider(document.querySelector('.slider-test2'), {
   startFP: 5,
   startSP: 10,
-  value: 'none',
+  indicator: 'none',
   
 });
 test2.init();

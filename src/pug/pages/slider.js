@@ -1,97 +1,28 @@
 "use strict";
 
-import {createMenu } from './utils.js';
+import {_render, _onDialDown} from './utils.js';
+import {_createMenu, _onChange} from './slider-menu.js';
 
-class Slider {
-  
-  title = document.createElement('div');
-  dial = document.createElement('div'); 
-  dialColor = document.createElement('div');  
-  firstPointer = document.createElement('div');
-  secondPointer = document.createElement('div');
-  firstValue = document.createElement('div');
-  secondValue = document.createElement('div');
-  
+class Slider {  
   config = {
-    value: 'visible',
+    indicator: 'visible',
     startFP: 10,
     startSP: 20,
     min: 0,
     max: 10, 
     plane: 'horizontal',
     quantityPointer: '2',   
-    
-  };  
-  
+    showOptions: 'false',
+  }; 
 
-
-  constructor(elem, options){
-
-    this.wrap = elem;  
-    
-
-    this.config = Object.assign(this.config, options);
-    this.config = Object.assign(this.config, this.config2);
-    
-    this.scale = (this.config.max - this.config.min) / 10;   
-
-    this.title.className = 'slider-title';
-    this.title.innerHTML = 'Range slider';
-    this.wrap.append(this.title);
-    
-    this.wrap.append(this.dial);
-    this.dial.className = 'slider-dial';
-
-    if(this.config.plane === 'vertical') {
-
-      this.dial.classList.add('rotate');
-    };       
-      
-    this.dial.append(this.dialColor);
-    this.dialColor.className = 'slider-dial__color';  
-    
-    
-    this.firstPointer.className = 'slider-Pointer1';
-    this.dial.append(this.firstPointer);
-
-    if(this.config.quantityPointer === '2'){
-
-      this.firstPointer.style.left = ((this.config.startFP - this.config.min) * (this.dial.offsetWidth - this.firstPointer.offsetWidth) / 10 / this.scale) + 'px'; 
-
-    } else if (this.config.quantityPointer === '1'){
-
-      this.firstPointer.style.display = 'none';
-      this.firstPointer.style.left = 0; 
-    };
-
-    this.secondPointer.className = 'slider-Pointer2';
-    this.dial.append(this.secondPointer); 
-    this.secondPointer.style.left =  ((this.config.startSP - this.config.min) * (this.dial.offsetWidth - this.secondPointer.offsetWidth) / 10 / this.scale) + 'px';
-    
-    if (this.config.value === 'visible'){
-
-      this.firstValue.className = 'slider-value1';
-      this.firstValue.innerHTML = this.config.startFP;    
-      this.firstPointer.append(this.firstValue);
-      this.firstValue.style.display = this.firstPointer.style.display;
-      this.firstValue.style.left = - 7 * this.firstValue.innerHTML.length;
-      
-      this.secondValue.className = 'slider-value2';
-      this.secondValue.innerHTML = this.config.startSP ;
-      this.secondPointer.append(this.secondValue); 
-    };
-    if (this.config.quantityPointer === '2'){
-      this.dialColor.style.left = +this.firstPointer.style.left.slice(0, -2) +'px';
-      this.dialColor.style.width = +this.secondPointer.style.left.slice(0, -2) - +this.firstPointer.style.left.slice(0, -2) +'px'; 
-    }else if (this.config.quantityPointer === '1'){
-      this.dialColor.style.left = 0;
-      this.dialColor.style.width = +this.secondPointer.style.left.slice(0, -2); 
-    };
-    
-    createMenu(this);  
+  constructor(elem, options){   
+   _render(this, elem, options) //создает HTML слайдера
    
-
-   }
+    if(this.config.showOptions === 'true'){ // вызывает шоу-меню
+    
+      _createMenu(this);
+    }; 
+  }
 
   init(){ 
     
@@ -101,127 +32,35 @@ class Slider {
     this.secondPointer.addEventListener('pointerdown', this.onPointerDown.bind(this), false);   
 
     this.dial.addEventListener('pointerdown', this.onDialDown.bind(this), false);  
-
-    this.select.addEventListener('change', this.onChange.bind(this), false);  
-    this.btn.addEventListener('click', this.onSubmit.bind(this), false); 
-  }
-
-  onChange(){
-    this.config.quantityPointer = this.select.value;
-    let rightEdge = this.dial.offsetWidth - this.secondPointer.offsetWidth;
     
-    console.log(this.config.quantityPointer);  
-    if(this.config.quantityPointer === '2'){
-
-      this.firstPointer.style.left = ((this.config.startFP - this.config.min) * (this.dial.offsetWidth - this.firstPointer.offsetWidth) / 10 / this.scale) + 'px'; 
-      this.firstPointer.style.display = 'block';
-      this.dialColor.style.left = +this.firstPointer.style.left.slice(0, -2) +'px';
-      this.dialColor.style.width = +this.secondPointer.style.left.slice(0, -2) - +this.firstPointer.style.left.slice(0, -2) +'px'; 
-      this.firstValue.innerHTML = Math.round((+this.firstPointer.style.left.slice(0, -2) / (rightEdge)) * 10 * this.scale) + this.config.min;
-      this.firstValue.style.left = - 7 * this.firstValue.innerHTML.length;
-      
-
-    } else if (this.config.quantityPointer === '1'){
-
-      this.firstPointer.style.display = 'none';
-      this.firstPointer.style.left = 0;
-      this.dialColor.style.left = 0;
-      this.dialColor.style.width = +this.secondPointer.style.left.slice(0, -2); 
+    if(this.config.showOptions === 'true'){
+      this.quantityPointers.addEventListener('change', this.onChange.bind(this), false);  
+      this.btnSave.addEventListener('click', this.onClick.bind(this), false);     
     };
-    
-    
-  }
-  onSubmit(){
    
-    //this.firstPointer.style.display = 'none';
+   
+  }
+
+  onChange(){ 
+    _onChange(this);   // выбор количество ползунков в шоу-меню
+  }
+
+  onClick(event){    // сохраняет настройки в шоу меню
+    event.preventDefault(); 
+    this.dialColor.style.backgroundColor= 'red'; 
+    this.config.plane = 'vertical' ;
     
   }
   
 
 
-  onDialDown(event){ // клик по шкале    
 
-    let dial = this.wrap.querySelector('.slider-dial');
-    let firstPointer = this.wrap.querySelector('.slider-Pointer1');
-    let secondPointer = this.wrap.querySelector('.slider-Pointer2');
-    let dialSfiftX;
-    
-     if (event.target === dial || event.target ===this.dialColor){
-
-      
-      let rightEdge = dial.offsetWidth - secondPointer.offsetWidth;
-
-      if(this.config.plane === 'horizontal'){        
-       
-        dialSfiftX = event.clientX - firstPointer.offsetWidth / 2 - dial.getBoundingClientRect().left;
-
-        if ((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && this.config.quantityPointer === '2'){
-
-          if (dialSfiftX - firstPointer.offsetWidth < 0) {
-  
-            dialSfiftX = 0;
-          }; 
-  
-          this.firstPointer.style.left = dialSfiftX + 'px';
-  
-        } else if((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 > (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2){
-  
-          if (dialSfiftX > rightEdge ) {
-  
-            dialSfiftX = rightEdge;        
-          }; 
-        this.secondPointer.style.left = dialSfiftX + 'px';        
-        } else if (((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && this.config.quantityPointer === '1')){
-          if (dialSfiftX > rightEdge ) {
-  
-            dialSfiftX = rightEdge;        
-          }; 
-          this.secondPointer.style.left = dialSfiftX + 'px'; 
-          this.firstPointer.style.left = 0;
-        };
-
-
-    } else if (this.config.plane === 'vertical'){
-
-        dialSfiftX = dial.getBoundingClientRect().bottom - event.clientY - firstPointer.offsetWidth / 2;
-        
-        if ((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && this.config.quantityPointer === '2'){
-
-          if (dialSfiftX - firstPointer.offsetWidth < 0) {
-  
-            dialSfiftX = 0;
-          }; 
-  
-          this.firstPointer.style.left = dialSfiftX + 'px';
-  
-        } else if((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 > (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2){
-  
-          if (dialSfiftX > rightEdge) {
-  
-            dialSfiftX = rightEdge;        
-          }; 
-        this.secondPointer.style.left = dialSfiftX + 'px';  
-        } else if((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && this.config.quantityPointer === '1'){
-          if (dialSfiftX > rightEdge) {
-  
-            dialSfiftX = rightEdge;        
-          }; 
-          this.firstPointer.style.left = 0;
-        this.secondPointer.style.left = dialSfiftX + 'px';  
-        };
-      };
-
-      this.dialColor.style.left = +this.firstPointer.style.left.slice(0, -2) +'px';
-      this.dialColor.style.width = +this.secondPointer.style.left.slice(0, -2) - +this.firstPointer.style.left.slice(0, -2) +'px';
-
-      this.firstValue.innerHTML = Math.round((+firstPointer.style.left.slice(0, -2) / (rightEdge)) * 10 * this.scale) + this.config.min;
-      this.firstValue.style.left = - 7 * this.firstValue.innerHTML.length;
-      this.secondValue.innerHTML = Math.round((+this.secondPointer.style.left.slice(0, -2) / (rightEdge)) * 10 * this.scale) + this.config.min;
-    };
+  onDialDown(event){ // клик по шкале передвигает ближайший ползунок   
+    _onDialDown(this, event)    
   }
 
 
-onPointerDown(event){  
+onPointerDown(event){  //фиксирует таргет на зажжатом ползунке
 
   document.addEventListener('pointermove',  this.onPointerMove, false); 
   document.addEventListener('pointerup', this.onPointerUp, false);     
@@ -265,7 +104,7 @@ onPointerDown(event){
     };        
   }
 
-onPointerMove(event){   
+onPointerMove(event){   // передвигает зажатый ползунок
 
   let dial = this.wrap.querySelector('.slider-dial');
   let firstPointer = this.wrap.querySelector('.slider-Pointer1');
@@ -321,7 +160,7 @@ onPointerMove(event){
     };        
   }
   
-  onPointerUp(){   
+  onPointerUp(){    //отменяет зажатие и передвижиние ползунка
 
     document.removeEventListener('pointerup', this.onPointerUp); 
     document.removeEventListener('pointermove', this.onPointerMove);    
@@ -330,5 +169,5 @@ onPointerMove(event){
 }
 
 
-export {Slider};
+export {Slider}; // экспортирует в тест страницу(пока она есть), потом убрать
 

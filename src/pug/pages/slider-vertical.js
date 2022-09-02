@@ -144,3 +144,77 @@ class SliderVertical {
   
   export {SliderVertical};
   */
+
+
+
+
+
+
+
+
+  /*this.wrap = elem;      
+
+    this.config = Object.assign(this.config, options);  
+
+    this.title = document.createElement('div');
+    this.dial = document.createElement('div'); 
+    this.dialColor = document.createElement('div');  
+    this.firstPointer = document.createElement('div');
+    this.secondPointer = document.createElement('div');
+    this.firstValue = document.createElement('div');
+    this.secondValue = document.createElement('div'); 
+    
+    this.scale = (this.config.max - this.config.min) / 10;   
+
+    this.title.className = 'slider-title';
+    this.title.innerHTML = 'Range slider';
+    this.wrap.append(this.title);
+    
+    this.wrap.append(this.dial);
+    this.dial.className = 'slider-dial';
+
+    if(this.config.plane === 'vertical') {
+
+      this.dial.classList.add('rotate');
+    };       
+      
+    this.dial.append(this.dialColor);
+    this.dialColor.className = 'slider-dial__color';  
+    
+    
+    this.firstPointer.className = 'slider-Pointer1';
+    this.dial.append(this.firstPointer);
+
+    if(this.config.quantityPointer === '2'){
+
+      this.firstPointer.style.left = ((this.config.startFP - this.config.min) * (this.dial.offsetWidth - this.firstPointer.offsetWidth) / 10 / this.scale) + 'px'; 
+
+    } else if (this.config.quantityPointer === '1'){
+
+      this.firstPointer.style.display = 'none';
+      this.firstPointer.style.left = 0; 
+    };
+
+    this.secondPointer.className = 'slider-Pointer2';
+    this.dial.append(this.secondPointer); 
+    this.secondPointer.style.left =  ((this.config.startSP - this.config.min) * (this.dial.offsetWidth - this.secondPointer.offsetWidth) / 10 / this.scale) + 'px';
+    
+    if (this.config.value === 'visible'){
+
+      this.firstValue.className = 'slider-value1';
+      this.firstValue.innerHTML = this.config.startFP;    
+      this.firstPointer.append(this.firstValue);
+      this.firstValue.style.display = this.firstPointer.style.display;
+      this.firstValue.style.left = - 7 * this.firstValue.innerHTML.length;
+      
+      this.secondValue.className = 'slider-value2';
+      this.secondValue.innerHTML = this.config.startSP ;
+      this.secondPointer.append(this.secondValue); 
+    };
+    if (this.config.quantityPointer === '2'){
+      this.dialColor.style.left = +this.firstPointer.style.left.slice(0, -2) +'px';
+      this.dialColor.style.width = +this.secondPointer.style.left.slice(0, -2) - +this.firstPointer.style.left.slice(0, -2) +'px'; 
+    }else if (this.config.quantityPointer === '1'){
+      this.dialColor.style.left = 0;
+      this.dialColor.style.width = +this.secondPointer.style.left.slice(0, -2); 
+    };   */ 
