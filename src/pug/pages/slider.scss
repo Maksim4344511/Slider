@@ -141,18 +141,35 @@ body{
 .slider-menu{  
     position: absolute; 
     display: flex;
+    padding-top: 20px;
+    padding-left: 5px;
     top: 20px;
     left: 400px;
-    width: 400px;
-    height: 100px;
+    width: 600px;
+    height: 140px;
     border: 1px solid black;
 }
 
-
+option,
+select {
+    width: auto;
+    height: 20px;
+    margin-right: 5px;
+}
 
 .slider-config-save{  
-    display: flex;   
-    width: 200px;
-    height: 100px;
-    border: 1px solid black;
+    display: flex;
+    flex-direction:column;  
+    width: 160px;
+    height: 130px;
+    margin-left: 5px;
+    border: 2px solid gray; 
+    background-color: #f4f5ef;   
+}
+
+
+input{
+    width: 150px;
+    height: 20px;
+    margin-bottom: 5px;
 }

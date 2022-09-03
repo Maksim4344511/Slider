@@ -27,6 +27,7 @@ const test3 = new Slider(document.querySelector('.slider-test3'), {
   max: 10, 
   min: 0,
   plane: 'horizontal', 
+  quantityPointer: '1', 
   
 });
 test3.init();

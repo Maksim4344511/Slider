@@ -164,12 +164,103 @@ function _onDialDown (slider, event){
 	};
 }
 
-	
+function _onPointerDown(slider, event){
+	let firstPointer = slider.wrap.querySelector('.slider-Pointer1');
+  let secondPointer = slider.wrap.querySelector('.slider-Pointer2');
+  
+  if(slider.config.plane === 'horizontal') { 
+
+    if (event.target === firstPointer){ 
+
+      slider.focus = 'first';        
+      firstPointer.style.zIndex = 2;
+      secondPointer.style.zIndex = 1;
+      firstPointer.shiftX = event.clientX - firstPointer.getBoundingClientRect().left; 
+    
+    } else if (event.target === secondPointer){
+
+      slider.focus = 'second'; 
+      secondPointer.shiftX = event.clientX - secondPointer.getBoundingClientRect().left; 
+      firstPointer.style.zIndex = 1;
+      secondPointer.style.zIndex = 2;       
+    };  
+
+  } else if (slider.config.plane === 'vertical'){
+
+    if (event.target === firstPointer){ 
+
+        slider.focus = 'first';
+        firstPointer.style.zIndex = 2;
+        secondPointer.style.zIndex = 1;
+        firstPointer.shiftX = event.clientY - firstPointer.getBoundingClientRect().top; 
+
+    } else if (event.target === secondPointer){
+
+        slider.focus = 'second';
+        firstPointer.style.zIndex = 1;
+        secondPointer.style.zIndex = 2;
+        secondPointer.shiftX = event.clientY - secondPointer.getBoundingClientRect().top;
+      }; 
+    };        
+}	
+
+function _onPointerMove(slider, event){
+	let dial = slider.wrap.querySelector('.slider-dial');
+	let firstPointer = slider.wrap.querySelector('.slider-Pointer1');
+	let secondPointer = slider.wrap.querySelector('.slider-Pointer2');  
+	let rightEdge = dial.offsetWidth - secondPointer.offsetWidth;  
+	let newLeftFirstP;
+	let newLeftSecondP;
+
+	if (slider.focus === 'first'){ 
+
+		if (slider.config.plane === 'horizontal'){
+
+			newLeftFirstP = event.clientX - firstPointer.shiftX - dial.getBoundingClientRect().left;
+
+		} else if (slider.config.plane === 'vertical'){
+			newLeftFirstP =  dial.getBoundingClientRect().bottom - event.clientY - (firstPointer.offsetWidth - firstPointer.shiftX); 
+		}
+
+		if (newLeftFirstP < 0) {
+			newLeftFirstP = 0;
+		};
+
+		if (newLeftFirstP >= +secondPointer.style.left.slice(0, -2)){
+			newLeftFirstP = +secondPointer.style.left.slice(0, -2);
+		};
+
+		firstPointer.style.left = newLeftFirstP + 'px';
+		slider.firstValue.innerHTML = Math.round((+firstPointer.style.left.slice(0, -2) / (rightEdge)) * 10 * slider.scale) + slider.config.min;
+		slider.firstValue.style.left = - 7 * slider.firstValue.innerHTML.length; //что-бы не накладывались друг на друга
+		
+		slider.dialColor.style.left = newLeftFirstP + 'px';
+		slider.dialColor.style.width = +secondPointer.style.left.slice(0, -2) - +firstPointer.style.left.slice(0, -2) +'px';
+
+	} else if (slider.focus === 'second'){
+
+			if (slider.config.plane === 'horizontal'){
+				newLeftSecondP = event.clientX - secondPointer.shiftX - dial.getBoundingClientRect().left;   
+			} else if (slider.config.plane === 'vertical'){
+				newLeftSecondP = dial.getBoundingClientRect().bottom - event.clientY - (secondPointer.offsetWidth - secondPointer.shiftX); 
+			};
+
+			if (newLeftSecondP > rightEdge) {
+				newLeftSecondP = rightEdge;
+			}; 
+			
+			if (newLeftSecondP < +firstPointer.style.left.slice(0, -2)){
+				newLeftSecondP = +firstPointer.style.left.slice(0, -2);
+			};
+
+		secondPointer.style.left = newLeftSecondP + 'px';           
+		slider.secondValue.innerHTML = Math.round((+slider.secondPointer.style.left.slice(0, -2) / (rightEdge)) * 10 * slider.scale) + slider.config.min;
+		slider.dialColor.style.width = +secondPointer.style.left.slice(0, -2) - +firstPointer.style.left.slice(0, -2) +'px';
+		};  
+}
 
 
 
 
-
-
-export {_render, _onDialDown};
+export {_render, _onDialDown, _onPointerDown, _onPointerMove};
 
