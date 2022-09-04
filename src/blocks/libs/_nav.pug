@@ -10,3 +10,9 @@ mixin nav(activePage='Home', classes='nav', items= navItems)
                         aria-current='page'
                         href= href
                         class=(value === activePage ? "active" : ''))= value
+
+mixin navbar(clasess='navbar-dark bg-dark')
+    nav.navbar(class=`${clasess}`)
+        .container-fluid
+            if block
+                block

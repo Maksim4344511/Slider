@@ -54,12 +54,12 @@ function _createMenu(slider){//создание меню
 
 	slider.inputStartFP = document.createElement('input');
 	slider.inputStartFP.type = 'text';
-	slider.inputStartFP.value = 'Первый ползунок';    
+	slider.inputStartFP.value = 'Значение первого ползунка';    
 	slider.sliderConfigForm.append(slider.inputStartFP); 
 
 	slider.inputStartSP = document.createElement('input');
 	slider.inputStartSP.type = 'text';
-	slider.inputStartSP.value = 'Второй ползунок';    
+	slider.inputStartSP.value = 'Значение второго ползунка';    
 	slider.sliderConfigForm.append(slider.inputStartSP); 
 
 	slider.inputMin = document.createElement('input');
@@ -154,4 +154,3 @@ function _moveMenu (slider){
 
 
 
-export {_createMenu, _onChange,};

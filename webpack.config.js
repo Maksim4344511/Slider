@@ -18,7 +18,7 @@ fs.writeFile("src/blocks/libs/_libs.pug", mixins, (err) => {
     console.log("Mixins are generated automatically!");
 });
 
-const paths = globule.find(["src/pug/pages/**/*.pug"]);
+const paths = globule.find(["src/pug/pages/**/*.pug"]);//
 
 module.exports = {
     mode: mode,
