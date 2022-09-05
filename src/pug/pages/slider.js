@@ -1,29 +1,38 @@
 "use strict";
 
 import {} from './utils.js';
-import {_createMenu, _onChange} from './slider-menu.js';
+import {} from './slider-menu.js';
 
 class Slider {  
+	title = document.createElement('div');
+	dial = document.createElement('div'); 
+	dialColor = document.createElement('div');  
+	firstPointer = document.createElement('div');
+	secondPointer = document.createElement('div');
+	firstValue = document.createElement('div');
+	secondValue = document.createElement('div'); 
   config = {
 	indicator: 'visible',
 	startFP: 10,
 	startSP: 20,
 	min: 0,
-	max: 10, 
+	max: 30, 
 	plane: 'horizontal',
-	quantityPointer: 2, 
-	
+	quantityPointer: 2,	
   }; 
 
   constructor(elem, options){  
-		 
-   	_render(this, elem, options) //создает HTML слайдера  
-		
-		
+		 this.elem = elem;
+		 this.options = options;		
   }
 
-  init(){ 
-	
+  init(opt){ 
+		let elem = this.elem;	
+
+		this.options = Object.assign(this.options, opt);	
+		_render(this, elem, this.options); //создает HTML слайдера 
+		
+
   	this.onPointerMove = this.onPointerMove.bind(this);
 		this.onPointerUp = this.onPointerUp.bind(this);
 		this.firstPointer.addEventListener('pointerdown', this.onPointerDown.bind(this), false);
@@ -31,24 +40,11 @@ class Slider {
 		
 		this.dial.addEventListener('pointerdown', this.onDialDown.bind(this), false); 	
 		
-  }
-
-	
-/*
-  onChange(){ 
-		_onChange(this);   // выбор количество ползунков в шоу-меню  
-  }
-
-  onClick(event){    // сохраняет настройки в шоу меню
-		event.preventDefault(); 
-		this.dialColor.style.backgroundColor= 'red';        
-  }
-*/
+  }	
   onDialDown(event){ // клик по шкале передвигает ближайший ползунок  
 
-	_onDialDown(this, event)  
+	_onDialDown(this, event); 
   }
-
 
   onPointerDown(event){  //фиксирует таргет на зажжатом ползунке
 
@@ -74,26 +70,19 @@ class Slider {
 function _render(slider, elem, options){
 	slider.wrap = elem;      
 	
-	slider.config = Object.assign(slider.config, options);	
-	
-
-	slider.title = document.createElement('div');
-	slider.dial = document.createElement('div'); 
-	slider.dialColor = document.createElement('div');  
-	slider.firstPointer = document.createElement('div');
-	slider.secondPointer = document.createElement('div');
-	slider.firstValue = document.createElement('div');
-	slider.secondValue = document.createElement('div'); 
+	slider.config = Object.assign(slider.config, options);		
 	
 	slider.scale = (slider.config.max - slider.config.min) / 10;   
 
-	slider.title.className = 'slider-title';
-	slider.title.innerHTML = 'Range slider';
-	slider.wrap.append(slider.title);
+	
 	_error(slider);
 	
-	slider.wrap.append(slider.dial);
+	slider.wrap.prepend(slider.dial);
 	slider.dial.className = 'slider-dial';
+
+	slider.title.className = 'slider-title';
+	slider.title.innerHTML = 'Range slider';
+	slider.wrap.prepend(slider.title);
 
 	if(slider.config.plane === 'vertical') {
 
@@ -110,7 +99,8 @@ function _render(slider, elem, options){
 	if(slider.config.quantityPointer === 2){
 
 		slider.firstPointer.style.left = ((slider.config.startFP - slider.config.min) * (slider.dial.offsetWidth - slider.firstPointer.offsetWidth) / 10 / slider.scale) + 'px'; 
-
+		slider.firstPointer.style.display = '';
+		
 	} else if (slider.config.quantityPointer === 1){
 
 		slider.firstPointer.style.display = 'none';
@@ -124,14 +114,17 @@ function _render(slider, elem, options){
 	if (slider.config.indicator === 'visible'){
 
 		slider.firstValue.className = 'slider-value1';
-		slider.firstValue.innerHTML = slider.config.startFP;    
+		slider.firstValue.innerHTML = +slider.config.startFP;    
 		slider.firstPointer.append(slider.firstValue);
 		slider.firstValue.style.display = slider.firstPointer.style.display;
 		slider.firstValue.style.left = - 7 * slider.firstValue.innerHTML.length;
 		
 		slider.secondValue.className = 'slider-value2';
-		slider.secondValue.innerHTML = slider.config.startSP ;
+		slider.secondValue.innerHTML = +slider.config.startSP ;
 		slider.secondPointer.append(slider.secondValue); 
+	} else if (slider.config.indicator === ''){
+		slider.firstValue.style.display = 'none';
+		slider.secondValue.style.display = 'none';
 	};
 
 	if (slider.config.quantityPointer === 2){
@@ -335,14 +328,23 @@ function _error(slider){
 
 	if (typeof(slider.config.startFP) != 'number' || typeof(slider.config.startSP) != 'number'){
 		slider.title.innerHTML = 'Стартовое значение ползунка должно быть числом';
-		slider.title.style.color = 'red';
+		
+	};		
+
+	if (isNaN(slider.config.startFP) || isNaN(slider.config.startSP)){
+		slider.title.innerHTML = 'Стартовое значение ползунка должно быть числом';
+		
 	};
 
 	if (typeof(slider.config.min) != 'number' || typeof(slider.config.max) != 'number'){	
 		slider.title.innerHTML = 'Минимальное и максимальное значения слайдера должны быть числом';
-		slider.title.style.color = 'red';	
+		
+	};		
+
+	if (isNaN(slider.config.min) || isNaN(slider.config.max)){
+		slider.title.innerHTML = 'Стартовое значение ползунка должно быть числом';
 	};
-	
+
 	if (slider.config.startFP < slider.config.min || slider.config.startFP > slider.config.max){		
 		slider.config.startFP = slider.config.min;	
 		alert("Значение ползунка не должно выходить за пределы min и max слайдера");		
@@ -353,7 +355,6 @@ function _error(slider){
 		alert("Значение ползунка не должно выходить за пределы min и max слайдера");			
 	}; 
 
-
 	if (slider.config.startFP > slider.config.startSP){		
 		slider.config.startFP = slider.config.min;
 		slider.config.startSP = slider.config.max;	
@@ -361,14 +362,6 @@ function _error(slider){
 	};	
 }
 
-/*
-  
-	startFP: 10,
-	startSP: 20,
-	min: 0,
-	max: 10, 
-	
 
-*/
-export {Slider}; // экспортирует в тест страницу(пока она есть), потом убрать
+export default Slider; // экспортирует в тест страницу(пока она есть), потом убрать
 

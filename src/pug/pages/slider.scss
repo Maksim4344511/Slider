@@ -1,31 +1,40 @@
 body{
+    display: flex;
     width: 1200px;
-    padding-left: 100px;
+    padding-left: 20px;
     padding-top: 20px;
 }
 
 .slider-test1{   
+
     width: 300px;
-    height: 100px;
-    margin-bottom: 20px;
+    height: auto;
+    margin-bottom: 100px;
+    margin-right: 50px;
 }
 
 .slider-test2{   
-    width: 400px;
-    height: 100px;
-    margin-bottom: 20px;
-}
-
-.slider-test3{   
-    width: 300px;
-    height: 100px;
-    margin-bottom: 20px;
-}
-
-.slider-test4{   
+   
     width: 200px;
-    height: 400px;
+    height: auto;
     margin-bottom: 20px;
+    margin-right: 50px;
+}
+
+.slider-test3{  
+   
+    width: 300px;
+    height: auto;
+    margin-bottom: 20px;
+    margin-right: 50px;
+}
+
+.slider-test4{  
+    
+    width: 200px;
+    height:auto;
+    margin-bottom: 20px;
+    margin-left: 20px;
 }
 
 .slider-title{
@@ -35,12 +44,11 @@ body{
     font-weight: 700;
     font-size: 12px;
     line-height: 12px;
-    text-transform: uppercase;
-    color: #080e1f;  
-    display: flex;
+    text-transform: uppercase;    
     margin-bottom: 50px;
     user-select: none;
     touch-action: none;
+    margin-bottom: 50px;
 }
 
 .slider-dial {
@@ -55,6 +63,7 @@ body{
     border-radius: 5px;    
     user-select: none;
     touch-action: none;
+    margin-bottom: 60px;    
 }
 
 .slider-dial__color{
@@ -138,38 +147,18 @@ body{
    
 }
 
-.slider-menu{  
-    position: absolute; 
+
+.menu{   
+    width: 200px;
+    height: 350px;
     display: flex;
-    padding-top: 20px;
-    padding-left: 5px;
-    top: 20px;
-    left: 400px;
-    width: 600px;
-    height: 140px;
-    border: 1px solid black;
-}
-
-option,
-select {
-    width: auto;
-    height: 20px;
-    margin-right: 5px;
-}
-
-.slider-config-save{  
-    display: flex;
-    flex-direction:column;  
-    width: 160px;
-    height: 130px;
-    margin-left: 5px;
-    border: 2px solid gray; 
-    background-color: #f4f5ef;   
+    justify-content:space-between;
+    flex-direction: column;
+    margin-top: auto;
+    margin-left: 20px;
 }
 
 
-input{
-    width: 150px;
-    height: 20px;
-    margin-bottom: 5px;
+.menu__submit{
+    margin-top: 40px;
 }

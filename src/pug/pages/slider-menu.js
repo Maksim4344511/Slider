@@ -1,6 +1,6 @@
 "use strict";
 
-
+/*
 function _createMenu(slider){//создание меню
 
 	slider.sliderMenu = document.createElement('div');
@@ -19,6 +19,7 @@ function _createMenu(slider){//создание меню
 	slider.quantityPointers.append(slider.optionPointer1);
 	slider.optionPointer2 = new Option("2", "2");
 	slider.quantityPointers.append(slider.optionPointer2);
+
 
 //выбор плоскости
 	slider.plane = document.createElement('select');
@@ -150,7 +151,7 @@ function _moveMenu (slider){
 
 
 
-
+*/
 
 
 
