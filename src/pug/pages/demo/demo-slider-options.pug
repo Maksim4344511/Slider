@@ -1,47 +1,34 @@
-mixin menu(title)
+mixin menu
 		form.menu(name='menu')
-			.menu__title= title
-			div Значение первого ползунка
-			input.menu__firstPointer(type='text' name='name' )
-			div Значение вторго ползунка
-			input.menu__secondPointer(type='text' name='name' )
-			div Минимальное значение слайдера
-			input.menu__min(type='text' name='name' )
-			div Максимальное значение слайдера
-			input.menu__max(type='text' name='name' )
-			div Выбор плоскости
-			select.menu__plane(name='plane' required='required')
-				option(value='horizontal') Горизонтальная
-				option(value='vertical') Вертикальная
-			div Интервал или одиночное значение?
-			select.menu__quantityPointer(name='quantityPointer' required='required')
-				option(value= 1) Одиночное
-				option(value= 2) Интервал
-			div Показывать значения слайдера?
-			select.menu__indicator(name='indicator' required='required')
-				option(value='visible') Показывать значения слайдера
-				option(value='') Не показывать значения слайдера
+			.menu__title-config Старт левого ползунка
+				input.menu__firstPointer(type='text' name='name' )
+			.menu__title-config Старт правого ползунка
+				input.menu__secondPointer(type='text' name='name' )
+			.menu__title-config Min слайдера
+				input.menu__min(type='text' name='name' )
+			.menu__title-config Max слайдера
+				input.menu__max(type='text' name='name' )
+			.menu__title-config Плоскость?
+				select.menu__plane(name='plane' required='required')
+					option(value='horizontal') Горизонтальная
+					option(value='vertical') Вертикальная
+			.menu__title-config Интервал?
+				select.menu__quantityPointer(name='quantityPointer' required='required')
+					option(value= 1) Одиночное
+					option(value= 2) Интервал
+			.menu__title-config Показывать значения?
+				select.menu__indicator(name='indicator' required='required')
+					option(value='visible') Да
+					option(value='') Нет
 			input.menu__submit(type='submit' name='submit_btn' value='Применить')
 			
 
 
 .slider-test1
-	+menu('Меню Slider 1')
-
+	+menu
 .slider-test2
-	+menu('Меню Slider 2')
-
-
+	+menu
 .slider-test3
 
 .slider-test4
 
-<!--
-onsubmit = onSubmit()
-.guruweba_example_infofield Тема обращения
-	select(name='theme' required='required')
-		option(value='') Выберите вариант
-		option Вопрос по работе сервиса
-		option Помощь в оформлении заказа
-		option Сотрудничество
-		option Пожелания / предложения -->

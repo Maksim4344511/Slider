@@ -100,8 +100,3 @@ const test4 = new Slider(document.querySelector('.slider-test4'), {
 });  
 test4.init();
 
-
-
-function _checkingEmptyLines(x){
-	
-}

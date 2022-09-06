@@ -1,7 +1,7 @@
 "use strict";
 
-import {} from './utils.js';
-import {} from './slider-menu.js';
+
+
 
 class Slider {  
 	title = document.createElement('div');
@@ -347,18 +347,18 @@ function _error(slider){
 
 	if (slider.config.startFP < slider.config.min || slider.config.startFP > slider.config.max){		
 		slider.config.startFP = slider.config.min;	
-		alert("Значение ползунка не должно выходить за пределы min и max слайдера");		
+		alert("Стартовое значение ползунка не должно выходить за пределы min и max слайдера");		
 	};
 
 	if (slider.config.startSP > slider.config.max || slider.config.startSP < slider.config.min){
 		slider.config.startSP = slider.config.max;
-		alert("Значение ползунка не должно выходить за пределы min и max слайдера");			
+		alert("Стартовое значение ползунка не должно выходить за пределы min и max слайдера");			
 	}; 
 
 	if (slider.config.startFP > slider.config.startSP){		
 		slider.config.startFP = slider.config.min;
 		slider.config.startSP = slider.config.max;	
-		alert("Значение первого ползунка не могут привышать значение второго");	
+		alert("Стартовое значение первого ползунка не могут привышать значение второго");	
 	};	
 }
 

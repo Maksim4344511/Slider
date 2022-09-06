@@ -1,0 +1,35 @@
+body{
+    
+    width: 1200px;
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+.menu{   
+    width: 900px;
+    height: 100px;
+    display: flex;   
+    justify-content: space-around;
+    align-items: flex-end;    
+    margin-left: 20px;
+    border: 1px solid black;
+    padding-bottom: 10px;
+}
+
+
+.menu__submit{
+    width: 80px;
+}
+
+input{
+    width: 80px;
+
+}
+
+option, select{
+    width: 80px;
+}
+
+.menu__title-config{
+    width: 80px;
+}

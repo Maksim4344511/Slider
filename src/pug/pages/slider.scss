@@ -1,5 +1,5 @@
 body{
-    display: flex;
+    
     width: 1200px;
     padding-left: 20px;
     padding-top: 20px;
@@ -144,21 +144,6 @@ body{
 .rotate{
     transform: rotate(270deg);
     margin-top: 120px;
+    margin-bottom: 220px;
    
-}
-
-
-.menu{   
-    width: 200px;
-    height: 350px;
-    display: flex;
-    justify-content:space-between;
-    flex-direction: column;
-    margin-top: auto;
-    margin-left: 20px;
-}
-
-
-.menu__submit{
-    margin-top: 40px;
 }
