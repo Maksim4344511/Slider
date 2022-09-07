@@ -1,8 +1,5 @@
 "use strict";
 
-
-
-
 class Slider {  
 	title = document.createElement('div');
 	dial = document.createElement('div'); 
@@ -21,26 +18,24 @@ class Slider {
 	quantityPointer: 2,	
   }; 
 
-  constructor(elem, options){  
-		 this.elem = elem;
-		 this.options = options;		
+  constructor(elem){  
+	this.elem = elem;
+	this.onPointerMove = this.onPointerMove.bind(this);
+	this.onPointerUp = this.onPointerUp.bind(this);			
   }
 
   init(opt){ 
-		let elem = this.elem;	
 
-		this.options = Object.assign(this.options, opt);	
-		_render(this, elem, this.options); //создает HTML слайдера 
+	let elem = this.elem;	
+	this.config = Object.assign(this.config, opt);	
 		
+	_render(this, elem, this.options); //создает HTML слайдера 
 
-  	this.onPointerMove = this.onPointerMove.bind(this);
-		this.onPointerUp = this.onPointerUp.bind(this);
-		this.firstPointer.addEventListener('pointerdown', this.onPointerDown.bind(this), false);
-		this.secondPointer.addEventListener('pointerdown', this.onPointerDown.bind(this), false);   
-		
-		this.dial.addEventListener('pointerdown', this.onDialDown.bind(this), false); 	
-		
+	this.firstPointer.addEventListener('pointerdown', this.onPointerDown.bind(this), false);
+	this.secondPointer.addEventListener('pointerdown', this.onPointerDown.bind(this), false);   	
+	this.dial.addEventListener('pointerdown', this.onDialDown.bind(this), false); 		
   }	
+
   onDialDown(event){ // клик по шкале передвигает ближайший ползунок  
 
 	_onDialDown(this, event); 
@@ -48,14 +43,15 @@ class Slider {
 
   onPointerDown(event){  //фиксирует таргет на зажжатом ползунке
 
-		document.addEventListener('pointermove',  this.onPointerMove, false); 
-		document.addEventListener('pointerup', this.onPointerUp, false);     
-		_onPointerDown(this, event);  
+	document.addEventListener('pointermove',  this.onPointerMove, false); 
+	document.addEventListener('pointerup', this.onPointerUp, false);     
+	_onPointerDown(this, event);  
   }
 
   onPointerMove(event){   // передвигает зажатый ползунок
-		_onPointerMove(this, event);      
-  }
+
+	_onPointerMove(this, event);      
+}
 	
   onPointerUp(){    //отменяет зажатие и передвижиние ползунка
 
@@ -64,16 +60,11 @@ class Slider {
   }
 }
 
+function _render(slider, elem){
 
-
-
-function _render(slider, elem, options){
-	slider.wrap = elem;      
+	slider.wrap = elem;  		
 	
-	slider.config = Object.assign(slider.config, options);		
-	
-	slider.scale = (slider.config.max - slider.config.min) / 10;   
-
+	slider.scale = (slider.config.max - slider.config.min) / 10;  
 	
 	_error(slider);
 	
@@ -84,7 +75,7 @@ function _render(slider, elem, options){
 	slider.title.innerHTML = 'Range slider';
 	slider.wrap.prepend(slider.title);
 
-	if(slider.config.plane === 'vertical') {
+	if (slider.config.plane === 'vertical'){
 
 		slider.dial.classList.add('rotate');
 	};       
@@ -96,7 +87,7 @@ function _render(slider, elem, options){
 	slider.firstPointer.className = 'slider-Pointer1';
 	slider.dial.append(slider.firstPointer);
 
-	if(slider.config.quantityPointer === 2){
+	if (slider.config.quantityPointer === 2){
 
 		slider.firstPointer.style.left = ((slider.config.startFP - slider.config.min) * (slider.dial.offsetWidth - slider.firstPointer.offsetWidth) / 10 / slider.scale) + 'px'; 
 		slider.firstPointer.style.display = '';
@@ -114,15 +105,16 @@ function _render(slider, elem, options){
 	if (slider.config.indicator === 'visible'){
 
 		slider.firstValue.className = 'slider-value1';
-		slider.firstValue.innerHTML = +slider.config.startFP;    
+		slider.firstValue.innerHTML = +slider.config.startFP;  //почему +?  
 		slider.firstPointer.append(slider.firstValue);
 		slider.firstValue.style.display = slider.firstPointer.style.display;
-		slider.firstValue.style.left = - 7 * slider.firstValue.innerHTML.length;
+		//slider.firstValue.style.left = - 7 * slider.firstValue.innerHTML.length;
 		
 		slider.secondValue.className = 'slider-value2';
 		slider.secondValue.innerHTML = +slider.config.startSP ;
 		slider.secondPointer.append(slider.secondValue); 
 	} else if (slider.config.indicator === ''){
+
 		slider.firstValue.style.display = 'none';
 		slider.secondValue.style.display = 'none';
 	};
@@ -132,7 +124,7 @@ function _render(slider, elem, options){
 		slider.dialColor.style.left = +slider.firstPointer.style.left.slice(0, -2) +'px';
 		slider.dialColor.style.width = +slider.secondPointer.style.left.slice(0, -2) - +slider.firstPointer.style.left.slice(0, -2) +'px';
 
-	}else if (slider.config.quantityPointer === 1){
+	} else if (slider.config.quantityPointer === 1){
 
 		slider.dialColor.style.left = 0;
 		slider.dialColor.style.width = +slider.secondPointer.style.left.slice(0, -2); 
@@ -143,76 +135,76 @@ function _render(slider, elem, options){
 
 function _onDialDown (slider, event){
 	let dial = slider.wrap.querySelector('.slider-dial');
-	let firstPointer = slider.wrap.querySelector('.slider-Pointer1');
+	let firstPointer = slider.wrap.querySelector('.slider-Pointer1');/// можно ли не искать??
 	let secondPointer = slider.wrap.querySelector('.slider-Pointer2');
-	let dialSfiftX;
+	let dialShiftX;
 	
-		if (event.target === dial || event.target ===slider.dialColor){
+		if (event.target === dial || event.target === slider.dialColor){
 		
 		let rightEdge = dial.offsetWidth - secondPointer.offsetWidth;
 
 		if(slider.config.plane === 'horizontal'){        
 			
-			dialSfiftX = event.clientX - firstPointer.offsetWidth / 2 - dial.getBoundingClientRect().left;
+			dialShiftX = event.clientX - firstPointer.offsetWidth / 2 - dial.getBoundingClientRect().left;
 
-			if ((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && slider.config.quantityPointer === 2){
+			if ((dialShiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialShiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && slider.config.quantityPointer === 2){
 
-				if (dialSfiftX - firstPointer.offsetWidth < 0) {
+				if (dialShiftX - firstPointer.offsetWidth < 0) {
 
-					dialSfiftX = 0;
+					dialShiftX = 0;
 				}; 
 
-				slider.firstPointer.style.left = dialSfiftX + 'px';
+				slider.firstPointer.style.left = dialShiftX + 'px';
 
-			} else if((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 > (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2){
+			} else if((dialShiftX - +firstPointer.style.left.slice(0, -2)) ** 2 > (dialShiftX - +secondPointer.style.left.slice(0, -2)) ** 2){
 
-					if (dialSfiftX > rightEdge ) {
+					if (dialShiftX > rightEdge ) {
 
-						dialSfiftX = rightEdge;        
+						dialShiftX = rightEdge;        
 					}; 
-				slider.secondPointer.style.left = dialSfiftX + 'px';  
+				slider.secondPointer.style.left = dialShiftX + 'px';  
 
-			} else if (((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && slider.config.quantityPointer === 1)){
+			} else if (((dialShiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialShiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && slider.config.quantityPointer === 1)){
 				
-				if (dialSfiftX > rightEdge ) {
+				if (dialShiftX > rightEdge ) {
 
-					dialSfiftX = rightEdge;        
+					dialShiftX = rightEdge;        
 				}; 
-				slider.secondPointer.style.left = dialSfiftX + 'px'; 
+				slider.secondPointer.style.left = dialShiftX + 'px'; 
 				slider.firstPointer.style.left = 0;
 			};
 
 
 	} else if (slider.config.plane === 'vertical'){
 
-			dialSfiftX = dial.getBoundingClientRect().bottom - event.clientY - firstPointer.offsetWidth / 2;
+			dialShiftX = dial.getBoundingClientRect().bottom - event.clientY - firstPointer.offsetWidth / 2;
 			
-			if ((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && slider.config.quantityPointer === 2){
+			if ((dialShiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialShiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && slider.config.quantityPointer === 2){
 
-				if (dialSfiftX - firstPointer.offsetWidth < 0) {
+				if (dialShiftX - firstPointer.offsetWidth < 0) {
 
-					dialSfiftX = 0;
+					dialShiftX = 0;
 				}; 
 
-				slider.firstPointer.style.left = dialSfiftX + 'px';
+				slider.firstPointer.style.left = dialShiftX + 'px';
 
-			} else if((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 > (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2){
+			} else if((dialShiftX - +firstPointer.style.left.slice(0, -2)) ** 2 > (dialShiftX - +secondPointer.style.left.slice(0, -2)) ** 2){
 
-				if (dialSfiftX > rightEdge) {
+				if (dialShiftX > rightEdge) {
 
-					dialSfiftX = rightEdge;        
+					dialShiftX = rightEdge;        
 				}; 
 
-			slider.secondPointer.style.left = dialSfiftX + 'px'; 
+			slider.secondPointer.style.left = dialShiftX + 'px'; 
 
-			} else if((dialSfiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialSfiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && slider.config.quantityPointer === 1){
-				if (dialSfiftX > rightEdge) {
+			} else if((dialShiftX - +firstPointer.style.left.slice(0, -2)) ** 2 < (dialShiftX - +secondPointer.style.left.slice(0, -2)) ** 2 && slider.config.quantityPointer === 1){
+				if (dialShiftX > rightEdge) {
 
-					dialSfiftX = rightEdge;        
+					dialShiftX = rightEdge;        
 				}; 
 
 				slider.firstPointer.style.left = 0;
-				slider.secondPointer.style.left = dialSfiftX + 'px';  
+				slider.secondPointer.style.left = dialShiftX + 'px';  
 			};
 		};
 
@@ -227,7 +219,7 @@ function _onDialDown (slider, event){
 
 function _onPointerDown(slider, event){
 	let firstPointer = slider.wrap.querySelector('.slider-Pointer1');
-  let secondPointer = slider.wrap.querySelector('.slider-Pointer2');
+  	let secondPointer = slider.wrap.querySelector('.slider-Pointer2');
   
   if(slider.config.plane === 'horizontal') { 
 
@@ -272,7 +264,7 @@ function _onPointerMove(slider, event){
 	let rightEdge = dial.offsetWidth - secondPointer.offsetWidth;  
 	let newLeftFirstP;
 	let newLeftSecondP;
-
+	
 	if (slider.focus === 'first'){ 
 
 		if (slider.config.plane === 'horizontal'){
@@ -301,6 +293,7 @@ function _onPointerMove(slider, event){
 	} else if (slider.focus === 'second'){
 
 			if (slider.config.plane === 'horizontal'){
+				
 				newLeftSecondP = event.clientX - secondPointer.shiftX - dial.getBoundingClientRect().left;   
 			} else if (slider.config.plane === 'vertical'){
 				newLeftSecondP = dial.getBoundingClientRect().bottom - event.clientY - (secondPointer.offsetWidth - secondPointer.shiftX); 
@@ -323,16 +316,16 @@ function _onPointerMove(slider, event){
 function _error(slider){
 
 	if (slider.config.quantityPointer != 2 && slider.config.quantityPointer != 1){
-		alert('Ошибка: количество ползунков 1 или 2');
+		throw new Error('Ошибка: количество ползунков 1 или 2');
 	};
 
 	if (typeof(slider.config.startFP) != 'number' || typeof(slider.config.startSP) != 'number'){
-		slider.title.innerHTML = 'Стартовое значение ползунка должно быть числом';
+		alert('Стартовое значение ползунка должно быть числом');
 		
 	};		
 
 	if (isNaN(slider.config.startFP) || isNaN(slider.config.startSP)){
-		slider.title.innerHTML = 'Стартовое значение ползунка должно быть числом';
+		throw new Error ('Стартовое значение ползунка должно быть числом');
 		
 	};
 
@@ -344,7 +337,7 @@ function _error(slider){
 	if (isNaN(slider.config.min) || isNaN(slider.config.max)){
 		slider.title.innerHTML = 'Стартовое значение ползунка должно быть числом';
 	};
-
+	
 	if (slider.config.startFP < slider.config.min || slider.config.startFP > slider.config.max){		
 		slider.config.startFP = slider.config.min;	
 		alert("Стартовое значение ползунка не должно выходить за пределы min и max слайдера");		

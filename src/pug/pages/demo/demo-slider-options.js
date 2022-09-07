@@ -28,7 +28,9 @@ class Menu {
 		
 	}
 
-	onSubmit(event){   
+	onSubmit(event){  
+		event.preventDefault(); 
+
 		if (this.firstPointer.value != ''){
 			this.opt.startFP = +this.firstPointer.value;
 		};
@@ -49,12 +51,13 @@ class Menu {
 		this.opt.quantityPointer = +this.quantityPointer.value;
 		
 		this.opt.indicator = this.indicator.value;
-
-
-		this.obj.init(this.opt);
 		
-
-		event.preventDefault(); 		
+		try {
+			this.obj.init(this.opt);
+		} catch (error) {
+			console.log(error)
+		}
+				
 	}
 }
 
@@ -74,29 +77,28 @@ const test1 = new Slider(document.querySelector('.slider-test1'), {
 const menu1 = new Menu(test1);
 menu1.createMenu();
 
+
+
 const test2 = new Slider(document.querySelector('.slider-test2'), {});
 const menu2 = new Menu(test2);
 menu2.createMenu();
 
 
 
-const test3 = new Slider(document.querySelector('.slider-test3'), {
-	startFP: 5,
-	startSP: 10,
-	max: 10, 
-	min: 0,
-	plane: 'horizontal', 
-	quantityPointer: 2, 
+const test3 = new Slider(document.querySelector('.slider-test3'),{});
+test3.init({
+	quantityPointer: 1,		
+	startFP: 10,
+	startSP: 20,
 	
 });
-test3.init();
 
-const test4 = new Slider(document.querySelector('.slider-test4'), {
+const test4 = new Slider(document.querySelector('.slider-test4'), {});  
+test4.init({
 	startFP: 10,
 	startSP: 100,
 	max: 200,
 	plane: 'vertical', 
 	quantityPointer: 2,   
-});  
-test4.init();
+});
 
