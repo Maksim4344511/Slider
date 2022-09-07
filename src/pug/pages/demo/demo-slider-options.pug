@@ -1,13 +1,13 @@
 mixin menu
 		form.menu(name='menu')
 			.menu__title-config Старт левого ползунка
-				input.menu__firstPointer(type='text' name='name' )
+				input.menu__firstPointer(type='text' name='name' autocomplete='off')
 			.menu__title-config Старт правого ползунка
-				input.menu__secondPointer(type='text' name='name' )
+				input.menu__secondPointer(type='text' name='name' autocomplete='off')
 			.menu__title-config Min слайдера
-				input.menu__min(type='text' name='name' )
+				input.menu__min(type='text' name='name' autocomplete='off')
 			.menu__title-config Max слайдера
-				input.menu__max(type='text' name='name' )
+				input.menu__max(type='text' name='name' autocomplete='off')
 			.menu__title-config Плоскость?
 				select.menu__plane(name='plane' required='required')
 					option(value='horizontal') Горизонтальная
