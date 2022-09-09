@@ -21,11 +21,7 @@ class Menu {
 		this.quantityPointer = elem.querySelector('.menu__quantityPointer');
 		this.indicator = elem.querySelector('.menu__indicator');
 
-
-		this.btnSubmit = elem.querySelector('.menu__submit');
-
-		this.form.addEventListener("submit", this.onSubmit.bind(this), false);
-		
+		this.form.addEventListener("submit", this.onSubmit.bind(this), false);		
 	}
 
 	onSubmit(event){  
@@ -87,18 +83,22 @@ menu2.createMenu();
 
 const test3 = new Slider(document.querySelector('.slider-test3'),{});
 test3.init({
-	quantityPointer: 1,		
-	startFP: 10,
-	startSP: 20,
+	indicator: 'visible',
+	startFP: 1,
+	startSP: 100,
+	min: 0,
+	max: 150, 
+	plane: 'horizontal',
+	quantityPointer: 2,		
 	
 });
 
 const test4 = new Slider(document.querySelector('.slider-test4'), {});  
 test4.init({
-	startFP: 10,
+	startFP: 50,
 	startSP: 100,
 	max: 200,
 	plane: 'vertical', 
 	quantityPointer: 2,   
 });
-
+ 
