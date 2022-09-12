@@ -1,40 +1,3 @@
-$SliderWidth: 200px; 
-
-
-body{    
-    width: 1200px;
-    padding-left: 20px;
-    padding-top: 20px;
-}
-
-.slider-test1{   
-    width: $SliderWidth;
-    height: auto;
-    margin-bottom: 100px;
-    margin-right: 50px;
-}
-
-.slider-test2{      
-    width: $SliderWidth;
-    height: auto;
-    margin-bottom: 20px;
-    margin-right: 50px;
-}
-
-.slider-test3{     
-    width: $SliderWidth;
-    height: auto;
-    margin-bottom: 20px;
-    margin-right: 50px;
-}
-
-.slider-test4{      
-    width: $SliderWidth;
-    height:auto;
-    margin-bottom: 20px;
-    margin-left: 20px;
-}
-
 .slider-title{
     display: flex;
     width: auto;
@@ -62,7 +25,9 @@ body{
     border-radius: 5px;    
     user-select: none;
     touch-action: none;
-    margin-bottom: 60px;    
+    margin-top: 60px;
+    margin-bottom: 60px;  
+
 }
 
 .slider-dial__color{
@@ -151,7 +116,7 @@ body{
 .rotate{
     transform: rotate(270deg);
     margin-top: 100px;
-    margin-bottom: $SliderWidth/2 ;   
+    margin-bottom: 100px;   
 }
 
 .rotate1{

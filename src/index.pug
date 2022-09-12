@@ -23,11 +23,17 @@ mixin menu
 					option(value='') Нет
 			input.menu__submit(type='submit' name='submit_btn' value='Применить')
 
-.slider-test1
-	+menu
-.slider-test2
-	+menu
-.slider-test3
-
-.slider-test4
-
+html
+	head
+		style
+			include ./index.scss
+	body
+		.slider-test1
+			
+			+menu
+		.slider-test2
+			+menu
+		.slider-test3
+			input.slider-first-input
+			input.slider-second-input
+		.slider-test4
