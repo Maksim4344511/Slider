@@ -45,7 +45,7 @@ class Slider {
 		if (this.wrap.querySelector('.slider-second-input')) {
 			this.secondInputValue.addEventListener('blur', this.onBlurSecondInput.bind(this), false);
 		};
-	}	
+	}
 
 	onBlurFirstInput() {
 		_onBlurFirstInput(this);
