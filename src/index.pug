@@ -1,17 +1,18 @@
 mixin menu
-		form.menu(name='menu')
-			.menu__title-config Старт левого ползунка
-				input.menu__firstPointer(type='text' name='name' autocomplete='off')
+		form.menu(name='menu' autocomplete="off")
+			.menu__title-config Старт левого ползунка			
+				input.menu__input-hide(type='text' name='name' autocomplete="off")
+				input.menu__firstPointer(type='text' name='name' autocomplete="nope")
 			.menu__title-config Старт правого ползунка
-				input.menu__secondPointer(type='text' name='name' autocomplete='off')
+				input.menu__secondPointer(type='text' name='name' autocomplete="nope")
 			.menu__title-config Min слайдера
-				input.menu__min(type='text' name='name' autocomplete='off')
+				input.menu__min(type='text' name='name' autocomplete="nope")
 			.menu__title-config Max слайдера
-				input.menu__max(type='text' name='name' autocomplete='off')
+				input.menu__max(type='text' name='name' autocomplete="nope")
 			.menu__title-config Плоскость?
 				select.menu__plane(name='plane' required='required')
-					option(value='horizontal') Горизонтальная
-					option(value='vertical') Вертикальная
+					option(value='horizontal') →
+					option(value='vertical') ↑
 			.menu__title-config Интервал?
 				select.menu__quantityPointer(name='quantityPointer' required='required')
 					option(value= 1) Одиночное
@@ -21,14 +22,18 @@ mixin menu
 					option(value='visible') Да
 					option(value='') Нет
 			input.menu__submit(type='submit' name='submit_btn' value='Применить')
+
+html
+	head
+		style
+			include ./index.scss
+	body
+		.slider-test1
 			
-
-
-.slider-test1
-	+menu
-.slider-test2
-	+menu
-.slider-test3
-
-.slider-test4
-
+			+menu
+		.slider-test2
+			+menu
+		.slider-test3
+			input.slider-first-input
+			input.slider-second-input
+		.slider-test4

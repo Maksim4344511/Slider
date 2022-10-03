@@ -1,0 +1,64 @@
+body{
+    padding: 30px;
+}
+
+.menu{   
+    width: 900px;
+    height: 100px;
+    display: flex;   
+    justify-content: space-around;
+    align-items: flex-end;    
+    margin-left: 20px;
+    border: 1px solid black;
+    padding-bottom: 10px;
+    user-select: none;
+    touch-action: none;
+}
+
+.menu__submit{
+    width: 80px;
+}
+
+.menu__input-hide{  
+   display: none;    
+}
+
+input{
+    width: 80px;
+}
+
+option, select{
+    width: 95px;
+}
+
+.menu__title-config{
+    width: 80px;
+}
+
+.slider-test1{   
+    width: 200px;
+    height: auto;
+    margin-bottom: 100px;
+    margin-right: 50px;
+}
+
+.slider-test2{      
+    width: 200px;
+    height: auto;
+    margin-bottom: 20px;
+    margin-right: 50px;
+}
+
+.slider-test3{     
+    width:200px;
+    height: auto;
+    margin-bottom: 20px;
+    margin-right: 50px;
+}
+
+.slider-test4{      
+    width: 200px;
+    height:auto;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
