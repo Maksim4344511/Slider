@@ -1,2 +1,1 @@
-# Pug template
-
+# Range-slider
