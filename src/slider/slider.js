@@ -9,9 +9,7 @@ class Slider {
 	firstPointer = document.createElement('div');
 	secondPointer = document.createElement('div');
 	firstValue = document.createElement('div');
-	secondValue = document.createElement('div');
-	// firstInputValue = document.createElement('input'); // FIXME:
-	// secondInputValue = document.createElement('input');
+	secondValue = document.createElement('div');	
 	config = {
 		indicator: 'visible',
 		startFP: 10,
@@ -19,40 +17,36 @@ class Slider {
 		min: 0,
 		max: 30, 
 		plane: 'horizontal',
-		quantityPointer: 2,	
-		title: "Slider",
+		quantityPointer: 2,
+		title: "Slider",		
 	};
 
 	constructor(elem) {
 		this.elem = elem;
 		this.onPointerMove = this.onPointerMove.bind(this);
 		this.onPointerUp = this.onPointerUp.bind(this);
+		this.onBlurFirstInput = this.onBlurFirstInput.bind(this);
+		this.onBlurSecondInput = this.onBlurSecondInput.bind(this);
 	}
 
-	init(opt) {
+	init(opt, cal1, cal2) {
 		this.config = Object.assign(this.config, opt);
+		this.onChangeFirstValue = cal1 ? cal1 : function(){};
+		this.onChangeSecondValue = cal2 ? cal2 : function(){};
 			
 		_render(this, this.elem, this.options); // создает HTML слайдера 
 
 		this.firstPointer.addEventListener('pointerdown', this.onPointerDown.bind(this), false);
 		this.secondPointer.addEventListener('pointerdown', this.onPointerDown.bind(this), false);
-		this.dial.addEventListener('pointerdown', this.onDialDown.bind(this), false); 
-
-		if (this.wrap.querySelector('.slider-second-input')) {		
-			this.firstInputValue.addEventListener('blur', this.onBlurFirstInput.bind(this), false); 
-		};
-
-		if (this.wrap.querySelector('.slider-second-input')) {
-			this.secondInputValue.addEventListener('blur', this.onBlurSecondInput.bind(this), false);
-		};
+		this.dial.addEventListener('pointerdown', this.onDialDown.bind(this), false); 		
 	}
 
-	onBlurFirstInput() {
-		_onBlurFirstInput(this);
+	onBlurFirstInput(event) {
+		_onBlurFirstInput(this, event);
 	}
 
-	onBlurSecondInput() {
-		_onBlurSecondInput(this);
+	onBlurSecondInput(event) {
+		_onBlurSecondInput(this, event);
 	}
 
 	onDialDown(event) { // клик по шкале передвигает ближайший ползунок
@@ -110,21 +104,10 @@ function _render(slider, elem) {
 	slider.firstValue.innerHTML = slider.config.startFP; 
 	slider.firstPointer.append(slider.firstValue);
 	slider.firstValue.style.display = slider.firstPointer.style.display;
-
-	if (slider.wrap.querySelector('.slider-first-input')) {
-		slider.firstInputValue = slider.wrap.querySelector('.slider-first-input');
-		slider.firstInputValue.value = slider.firstValue.innerHTML;
-		slider.firstInputValue.style.display = slider.firstPointer.style.display;
-	};
-
+	
 	slider.secondValue.className = 'slider-value2';
 	slider.secondValue.innerHTML = slider.config.startSP ;
-	slider.secondPointer.append(slider.secondValue); 
-
-	if (slider.wrap.querySelector('.slider-second-input')) {
-		slider.secondInputValue = slider.wrap.querySelector('.slider-second-input');
-		slider.secondInputValue.value = slider.secondValue.innerHTML;
-	};
+	slider.secondPointer.append(slider.secondValue);	
 
 	if (slider.config.plane === 'vertical') {
 		slider.dial.classList.add('rotate');
@@ -165,13 +148,13 @@ function _onDialDown(slider, event) {
 			dialShiftX = event.clientX - firstPointer.offsetWidth / 2 - dial.getBoundingClientRect().left;
 
 			if ((dialShiftX - firstPointer.offsetLeft) ** 2 < (dialShiftX - secondPointer.offsetLeft) ** 2 && slider.config.quantityPointer === 2 ||
-			(slider.firstValue.innerHTM === slider.secondValue.innerHTM) && (dialShiftX < slider.firstPointer.offsetLeft)) {
+			(slider.firstValue.innerHTML === slider.secondValue.innerHTML) && (dialShiftX < slider.firstPointer.offsetLeft)) {
 				if (dialShiftX - firstPointer.offsetWidth < 0) { dialShiftX = 0; }; 				
 
 				slider.firstPointer.style.left = dialShiftX;
 
 			} else if ((dialShiftX - firstPointer.offsetLeft) ** 2 > (dialShiftX - secondPointer.offsetLeft) ** 2 ||
-				(slider.firstValue.innerHTM === slider.secondValue.innerHTM) && (dialShiftX > slider.firstPointer.offsetLeft)) {					
+				(slider.firstValue.innerHTML === slider.secondValue.innerHTML) && (dialShiftX > slider.firstPointer.offsetLeft)) {					
 					if (dialShiftX > rightEdge ) {	dialShiftX = rightEdge;	}; 
 
 				slider.secondPointer.style.left = dialShiftX;
@@ -181,28 +164,28 @@ function _onDialDown(slider, event) {
 				slider.firstPointer.style.left = 0;
 			};
 
-	} else if (slider.config.plane === 'vertical'){
-		dialShiftX = dial.getBoundingClientRect().bottom - event.clientY - firstPointer.offsetWidth / 2;
-		
-		if ((dialShiftX - firstPointer.offsetLeft) ** 2 < (dialShiftX - secondPointer.offsetLeft) ** 2 && slider.config.quantityPointer === 2 ||
-		(slider.firstValue.innerHTM === slider.secondValue.innerHTM) && (dialShiftX < slider.firstPointer.offsetLeft)) {
-			if (dialShiftX - firstPointer.offsetWidth < 0) { dialShiftX = 0; };
+		} else if (slider.config.plane === 'vertical'){
+			dialShiftX = dial.getBoundingClientRect().bottom - event.clientY - firstPointer.offsetWidth / 2;
+			
+			if ((dialShiftX - firstPointer.offsetLeft) ** 2 < (dialShiftX - secondPointer.offsetLeft) ** 2 && slider.config.quantityPointer === 2 ||
+			(slider.firstValue.innerHTML === slider.secondValue.innerHTML) && (dialShiftX < slider.firstPointer.offsetLeft)) {
+				if (dialShiftX - firstPointer.offsetWidth < 0) { dialShiftX = 0; };
 
-			slider.firstPointer.style.left = dialShiftX;
+				slider.firstPointer.style.left = dialShiftX;
 
-		} else if ((dialShiftX - firstPointer.offsetLeft) ** 2 > (dialShiftX - secondPointer.offsetLeft) ** 2 ||
-		(slider.firstValue.innerHTM === slider.secondValue.innerHTM) && (dialShiftX > slider.firstPointer.offsetLeft)) {
-			if (dialShiftX > rightEdge) { dialShiftX = rightEdge; }; 
+			} else if ((dialShiftX - firstPointer.offsetLeft) ** 2 > (dialShiftX - secondPointer.offsetLeft) ** 2 ||
+			(slider.firstValue.innerHTML === slider.secondValue.innerHTML) && (dialShiftX > slider.firstPointer.offsetLeft)) {
+				if (dialShiftX > rightEdge) { dialShiftX = rightEdge; }; 
 
-			slider.secondPointer.style.left = dialShiftX;
+				slider.secondPointer.style.left = dialShiftX;
 
-		} else if ((dialShiftX - firstPointer.offsetLeft) ** 2 < (dialShiftX - secondPointer.offsetLeft) ** 2 && slider.config.quantityPointer === 1) {
-			if (dialShiftX > rightEdge) { dialShiftX = rightEdge; }; 
+			} else if ((dialShiftX - firstPointer.offsetLeft) ** 2 < (dialShiftX - secondPointer.offsetLeft) ** 2 && slider.config.quantityPointer === 1) {
+				if (dialShiftX > rightEdge) { dialShiftX = rightEdge; }; 
 
-			slider.firstPointer.style.left = 0;
-			slider.secondPointer.style.left = dialShiftX;
+				slider.firstPointer.style.left = 0;
+				slider.secondPointer.style.left = dialShiftX;
+			};
 		};
-	};
 
 		if (slider.config.quantityPointer === 2) {
 			slider.dialColor.style.left = slider.firstPointer.offsetLeft + slider.secondPointer.offsetWidth / 2;
@@ -212,13 +195,17 @@ function _onDialDown(slider, event) {
 			slider.dialColor.style.width = slider.secondPointer.offsetWidth / 2 + slider.secondPointer.offsetLeft;
 		};
 
-		slider.firstValue.innerHTML = Math.round((+firstPointer.offsetLeft / (rightEdge)) * 10 * slider.scale) + slider.config.min;
+		let value1 = Math.round((+firstPointer.offsetLeft / (rightEdge)) * 10 * slider.scale) + slider.config.min;
+
+		slider.firstValue.innerHTML = value1;
+		slider.onChangeFirstValue(value1);		
+
+		let value2 = Math.round((+slider.secondPointer.offsetLeft / (rightEdge)) * 10 * slider.scale) + slider.config.min;	
+
+		slider.onChangeSecondValue(value2);
+		slider.secondValue.innerHTML = value2;
+
 		
-		if (slider.wrap.querySelector('.slider-first-input')) {	slider.firstInputValue.value = slider.firstValue.innerHTML;	};
-
-		slider.secondValue.innerHTML = Math.round((+slider.secondPointer.offsetLeft / (rightEdge)) * 10 * slider.scale) + slider.config.min;
-
-		if (slider.wrap.querySelector('.slider-second-input')) { slider.secondInputValue.value = slider.secondValue.innerHTML; };
 	};
 }
 
@@ -274,9 +261,11 @@ function _onPointerMove(slider, event) {
 		if (newLeftFirstP >= +secondPointer.offsetLeft) { newLeftFirstP = +secondPointer.offsetLeft; };
 
 		firstPointer.style.left = newLeftFirstP;
-		slider.firstValue.innerHTML = Math.round((+firstPointer.offsetLeft / (rightEdge)) * 10 * slider.scale) + slider.config.min;
-
-		if (slider.wrap.querySelector('.slider-first-input')) {	slider.firstInputValue.value = slider.firstValue.innerHTML;	};
+		
+		let value1 = Math.round((+firstPointer.offsetLeft / (rightEdge)) * 10 * slider.scale) + slider.config.min;
+		
+		slider.onChangeFirstValue(value1);
+		slider.firstValue.innerHTML = value1;		
 
 		slider.dialColor.style.left = newLeftFirstP + slider.secondPointer.offsetWidth / 2;
 		slider.dialColor.style.width = secondPointer.offsetLeft - firstPointer.offsetLeft;
@@ -293,40 +282,48 @@ function _onPointerMove(slider, event) {
 			if (newLeftSecondP < +firstPointer.offsetLeft) { newLeftSecondP = +firstPointer.offsetLeft; };
 
 		secondPointer.style.left = newLeftSecondP;
-		slider.secondValue.innerHTML = Math.round((+slider.secondPointer.offsetLeft / (rightEdge)) * 10 * slider.scale) + slider.config.min;
-		slider.dialColor.style.width = +secondPointer.offsetLeft - +firstPointer.offsetLeft;
 
-		if (slider.wrap.querySelector('.slider-second-input')) { slider.secondInputValue.value = slider.secondValue.innerHTML; };
+		let value2 = Math.round((+slider.secondPointer.offsetLeft / (rightEdge)) * 10 * slider.scale) + slider.config.min;
+		
+		slider.onChangeSecondValue(value2);
+		slider.secondValue.innerHTML = value2;
+
+		slider.dialColor.style.width = +secondPointer.offsetLeft - +firstPointer.offsetLeft;		
 	};
 }
 
-function _onBlurFirstInput(slider) {
-	if (+slider.firstInputValue.value < slider.config.min) {
-		slider.firstInputValue.value = slider.config.min;
+function _onBlurFirstInput(slider, event) {
+
+	let value = +event.target.value;
+	if (value < slider.config.min) {
+		value = slider.config.min;
 	};
 
-	if (+slider.firstInputValue.value > +slider.secondInputValue.value) {
-		slider.firstInputValue.value = slider.secondInputValue.value;
+	if (value > +slider.secondValue.innerHTML) {
+		value = +slider.secondValue.innerHTML;
 	};
-
-	slider.firstPointer.style.left = ((slider.firstInputValue.value - slider.config.min) * (slider.dial.offsetWidth - slider.firstPointer.offsetWidth) / 10 / slider.scale);
-	slider.firstValue.innerHTML = slider.firstInputValue.value;	    
-	slider.dialColor.style.left = slider.firstPointer.offsetLeft + slider.secondPointer.offsetWidth / 2;
-	slider.dialColor.style.width = slider.secondPointer.offsetLeft - slider.firstPointer.offsetLeft ;
-}
-
-function _onBlurSecondInput(slider){
-	if (+slider.secondInputValue.value > slider.config.max) {
-		slider.secondInputValue.value = slider.config.max;
-	};
-
-	if (+slider.secondInputValue.value < +slider.firstInputValue.value) {
-		slider.secondInputValue.value = slider.firstInputValue.value;
-	};
-
-	slider.secondPointer.style.left =  ((slider.secondInputValue.value - slider.config.min) * (slider.dial.offsetWidth - slider.secondPointer.offsetWidth) / 10 / slider.scale);
 	
-	slider.secondValue.innerHTML = slider.secondInputValue.value;
+	slider.firstPointer.style.left = ((value - slider.config.min) * (slider.dial.offsetWidth - slider.firstPointer.offsetWidth) / 10 / slider.scale);
+	slider.firstValue.innerHTML = value;	
+	slider.dialColor.style.left = slider.firstPointer.offsetLeft + slider.secondPointer.offsetWidth / 2;
+	slider.dialColor.style.width = slider.secondPointer.offsetLeft - slider.firstPointer.offsetLeft;
+	
+}
+
+function _onBlurSecondInput(slider, event){
+	let value = +event.target.value;
+
+	if (value > slider.config.max) {
+		value = slider.config.max;
+	};
+
+	if (value < +slider.firstValue.innerHTML) {
+		value = +slider.firstValue.innerHTML;
+	};
+
+	slider.secondPointer.style.left =  ((value - slider.config.min) * (slider.dial.offsetWidth - slider.secondPointer.offsetWidth) / 10 / slider.scale);
+	
+	slider.secondValue.innerHTML = value;
 	slider.dialColor.style.left = slider.firstPointer.offsetLeft + slider.secondPointer.offsetWidth / 2;
 	slider.dialColor.style.width = slider.secondPointer.offsetLeft - slider.firstPointer.offsetLeft;
 }

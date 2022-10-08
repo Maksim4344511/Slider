@@ -57,24 +57,19 @@ class Menu {
 	}
 }
 
-const test1 = new Slider(document.querySelector('.slider-test1'), {
-	indicator: 'visible',
-	startFP: 1,
-	startSP: 100,
-	min: 0,
-	max: 150, 
-	plane: 'horizontal',
-	quantityPointer: 2,
-});
+
+
+
+const test1 = new Slider(document.querySelector('.slider-test1'));
 
 const menu1 = new Menu(test1);
 menu1.createMenu();
 
-const test2 = new Slider(document.querySelector('.slider-test2'), {});
+const test2 = new Slider(document.querySelector('.slider-test2'));
 const menu2 = new Menu(test2);
 menu2.createMenu();
 
-const test3 = new Slider(document.querySelector('.slider-test3'), {});
+const test3 = new Slider(document.querySelector('.slider-test3'));
 test3.init({
 	indicator: 'visible',
 	startFP: 1,
@@ -83,13 +78,28 @@ test3.init({
 	max: 150, 
 	plane: 'horizontal',
 	quantityPointer: 2,		
-});
+}, changeInputValue1, changeInputValue2);
 
-const test4 = new Slider(document.querySelector('.slider-test4'), {});  
+const test4 = new Slider(document.querySelector('.slider-test4'));  
 test4.init({
 	startFP: 50,
 	startSP: 100,
 	max: 200,
 	plane: 'vertical', 
 	quantityPointer: 2,   
-});
+}, changeInputValue1, changeInputValue2);
+
+
+
+let input1 = document.querySelector('.slider-first-input');
+let input2 = document.querySelector('.slider-second-input');
+function changeInputValue1(value) {
+	input1.value = value;
+};
+function changeInputValue2(value) {
+	input2.value = value;
+};
+
+
+input1.addEventListener('change', test3.onBlurFirstInput);
+input2.addEventListener('change', test3.onBlurSecondInput);
